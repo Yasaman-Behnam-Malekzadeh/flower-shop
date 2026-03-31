@@ -21,7 +21,6 @@ function CategorySection(props) {
           />
           <div className="absolute bottom-0 left-3 text-darkPink text-2xl font-bold p-4">
             {props.name}
-            yasaman
           </div>
         </Link>
     </div>
