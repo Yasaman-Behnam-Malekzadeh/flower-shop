@@ -7,19 +7,15 @@ function CategorySection(props) {
     <div className="category-section py-12">
       <Link
           to="/"
-          className="relative rounded-lg overflow-hidden w-70 h-80"
+          className="relative rounded-xl overflow-hidden w-80 h-90"
         >
           <img
             src={props.image}
             alt="Category"
-            className="w-80 h-80 object-cover hover:scale-105 transition-transform duration-300"
-            style={{
-              maskImage: "linear-gradient(to top, transparent, black 60%)",
-              WebkitMaskImage:
-                "linear-gradient(to top, transparent, black 60%)",
-            }}
+            className="w-80 h-90 rounded-xl object-cover"
           />
-          <div className="absolute bottom-0 left-3 text-darkPink text-2xl font-bold p-4">
+          <div className="absolute rounded-xl inset-0 bg-gradient-to-t from-black/50 to-transparent pointer-events-none" />
+          <div className="absolute rounded-xl bottom-0 left-3 text-darkPink text-2xl font-bold p-4">
             {props.name}
           </div>
         </Link>
