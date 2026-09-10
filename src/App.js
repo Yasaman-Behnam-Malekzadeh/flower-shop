@@ -1,19 +1,11 @@
-import Header from "./Components/Header";
+import React from 'react';
 import './App.css';
-import Hero from "./Components/Hero";
-import CategorySection from "./Components/CategorySection";
-import TopSellingProducts from "./Components/TopSellingProducts";
+import LandingPage from './Components/LandingPage';
 
-
-function App() {
+export default function App() {
   return (
-    <div className="bg-lightRed ">
-      <Header />
-      <Hero />
-      <CategorySection />
-      <TopSellingProducts />
+    <div className="min-h-screen bg-[#FAF8F5] flex flex-col font-sans text-gray-800 antialiased">
+      <LandingPage/>
     </div>
   );
 }
-
-export default App;
