@@ -1,11 +1,18 @@
 import React from "react";
 import "./App.css";
-import LandingPage from "../src/Pages/LandingPage";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import RootLayout from "./Components/Layout/RootLayout";
+import LandingPage from "./Pages/LandingPage";
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-[#FAF8F5] flex flex-col font-sans text-gray-800 antialiased">
-      <LandingPage />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        {/* Parent Route using Layout */}
+        <Route element={<RootLayout />}>
+          <Route path="/" element={<LandingPage />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
