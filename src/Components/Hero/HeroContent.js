@@ -25,7 +25,7 @@ const HeroContent = () => {
 
       {/* Primary CTA Button */}
       <div className="mb-8">
-        <button className="bg-brand-purple hover:bg-[#584172] text-white font-medium px-7 py-3.5 rounded-2xl flex items-center gap-3 transition-all transform hover:-translate-y-0.5 shadow-sm">
+        <button className="bg-brand-purple bg-[#584172] hover:bg-[#442e5d] text-white font-medium px-7 py-3.5 rounded-2xl flex items-center gap-3 shadow-sm">
           <span>Design your own bouquet</span>
           <ArrowRight className="w-4 h-4" />
         </button>
