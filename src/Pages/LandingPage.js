@@ -7,33 +7,39 @@ import FeaturesBar from "../Components/Hero/FeaturesBar";
 import FeaturedBouquets from "../Components/Collection/FeaturedBouquets";
 import CtaBanner from "../Components/Sections/CtaBanner";
 import HowItWorks from "../Components/Sections/HowItWorks";
+import Footer from "../Components/Layout/Footer";
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-light-cream flex flex-col font-sans text-gray-800 antialiased">
-      {/* 1. Full Screen Hero Group */}
-      <div className="min-h-screen flex flex-col justify-between">
-        <div>
-          <TopBanner />
-          <Navbar />
-        </div>
+    // 1. Outermost container MUST NOT have `overflow-hidden`
+    <div className="bg-light-cream font-sans text-gray-800 antialiased min-h-screen">
+      
+      {/* Top Banner (Scrolls away normally) */}
+      <TopBanner />
 
-        {/* Main Hero Section */}
+      {/* 2. Sticky Navbar wrapper as a DIRECT child of the page */}
+      <div className="sticky top-0 z-50 w-full">
+        <Navbar />
+      </div>
+
+      {/* 3. Hero Section */}
+      <div className="flex flex-col justify-between">
         <main className="container mx-auto px-6 sm:px-12 py-8 md:py-12 grid grid-cols-1 md:grid-cols-2 gap-12 items-center flex-1">
           <HeroContent />
           <HeroImage />
         </main>
-
-        {/* Bottom Features Bar */}
         <FeaturesBar />
       </div>
 
-      {/* 2. Main Sections Container */}
+      {/* 4. Main Sections (Navbar will stay pinned while scrolling through all of these) */}
       <div className="container mx-auto px-6 sm:px-12 w-full py-12 space-y-6">
         <FeaturedBouquets />
         <HowItWorks />
         <CtaBanner />
       </div>
+
+      {/* 5. Footer */}
+      <Footer />
     </div>
   );
 }

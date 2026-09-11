@@ -42,7 +42,7 @@ const products = [
 
 const FeaturedBouquets = () => {
   return (
-    <div className="bg-[#FAF8F5] w-full my-32 font-sans">
+    <div className=" w-full my-32 font-sans">
       <div className=" mx-auto">
         {/* Header Title Bar */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-10 gap-4">

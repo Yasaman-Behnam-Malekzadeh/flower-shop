@@ -3,7 +3,7 @@
 
   const HowItWorks = () => {
     return (
-      <div className=" w-full font-sans">
+      <div className=" w-full pb-20 font-sans">
         <div className="bg-[#EFEAEF] rounded-3xl  sm:p-12 lg:p-14 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           
           {/* Left Column */}

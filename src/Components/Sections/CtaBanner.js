@@ -3,7 +3,7 @@ import { ArrowRight } from 'lucide-react';
 
 const CtaBanner = () => {
   return (
-    <div className="w-full font-sans">
+    <div className="w-full pb-10 font-sans">
       <div className="bg-[#F6DDD9] rounded-3xl p-8 sm:p-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
         <div>
           <h2 className="text-2xl sm:text-3xl font-extrabold text-[#2B2B2B] tracking-tight">
