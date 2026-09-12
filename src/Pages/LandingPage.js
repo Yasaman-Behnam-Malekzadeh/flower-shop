@@ -10,7 +10,7 @@ export default function LandingPage() {
   return (
     <>
       {/* 1. Hero Group */}
-      <div className="flex flex-col justify-between">
+      <div className="h-[calc(100vh-80px)] min-h-[600px] flex flex-col justify-between">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 grid grid-cols-1 md:grid-cols-2 gap-12 items-center w-full">
           <HeroContent />
           <HeroImage />
