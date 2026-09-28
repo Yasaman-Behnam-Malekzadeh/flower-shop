@@ -6,7 +6,7 @@ import Footer from './Footer';
 
 export default function RootLayout() {
   return (
-    <div className="bg-light-cream font-sans text-gray-800 antialiased min-h-screen">
+    <div className="bg-cream font-sans text-gray-800 antialiased min-h-screen">
       {/* 1. Non-sticky Top Banner */}
       <TopBanner />
 

@@ -5,3 +5,14 @@
 body {
   font-family: serif;
 }
+
+@keyframes swing {
+  0% { transform: rotate(-22.5deg); }
+  50% { transform: rotate(22.5deg); }
+  100% { transform: rotate(-22.5deg); }
+}
+
+.animate-swing {
+  animation: swing 3.5s ease-in-out infinite;
+  transform-origin: center;
+}

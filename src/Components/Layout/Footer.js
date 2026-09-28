@@ -2,7 +2,7 @@ import React from 'react';
 
 const Footer = () => {
   return (
-    <footer className="w-full border-t border-gray-300 bg-[#FAF8F5] py-8 px-6 sm:px-12 font-sans mt-16">
+    <footer className="w-full border-t border-gray-300 bg-cream py-8 px-6 sm:px-12 font-sans">
       <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-600 font-medium">
         
         {/* Brand Logo */}

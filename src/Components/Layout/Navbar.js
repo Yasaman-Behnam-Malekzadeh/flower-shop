@@ -1,11 +1,12 @@
 import React from "react";
 import { Search, Heart, User, ShoppingBag } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
     <header className="w-full font-sans">
       {/* Main Navigation Bar */}
-      <nav className="bg-[#FAF8F5] border-b border-gray-300 px-6 sm:px-12 py-4 flex items-center justify-between">
+      <nav className="bg-cream border-b border-gray-300 px-6 sm:px-12 py-4 flex items-center justify-between">
         {/* Brand Logo */}
         <div className="flex items-center gap-2">
           {/* Flower Icon SVG */}
@@ -22,22 +23,25 @@ const Navbar = () => {
             <path d="M12 14a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4z" />
             <circle cx="12" cy="10" r="2" fill="currentColor" />
           </svg>
-          <span className="text-xl font-extrabold tracking-tight text-[#2B2B2B]">
-            JasminBlüte <span className="text-[#6C5389]">•</span>
-          </span>
+          <Link
+            to="/"
+            className="text-xl font-extrabold tracking-tight text-[#2B2B2B]"
+          >
+            JasminFlower <span className="text-[#6C5389]">•</span>
+          </Link>
         </div>
 
         {/* Center Navigation Links */}
         <div className="hidden md:flex items-center gap-8 text-sm font-medium text-[#4A4A4A]">
-          <a href="#shop" className="hover:text-black transition-colors">
+          <Link to="shop" className="hover:text-black transition-colors">
             Shop bouquets
-          </a>
-          <a href="#build" className="hover:text-black transition-colors">
+          </Link>
+          <Link to="build" className="hover:text-black transition-colors">
             Build a bouquet
-          </a>
-          <a href="#how" className="hover:text-black transition-colors">
+          </Link>
+          <Link to="how" className="hover:text-black transition-colors">
             How it works
-          </a>
+          </Link>
         </div>
 
         {/* Right Utility Bar */}
