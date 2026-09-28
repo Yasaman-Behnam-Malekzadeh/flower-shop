@@ -3,7 +3,6 @@ import ShopFilterBar from '../Components/Shop/ShopFilterBar';
 import BouquetCard from '../Components/Shop/BouquetCard';
 import FeaturesBar from '../Components/Hero/FeaturesBar';
 
-// نمونه داده‌ها (می‌توانید تصاویر گل‌ها را جایگزین کنید)
 const PRODUCTS = [
   { id: 1, title: 'Pastel Poetry', description: 'Crochet flowers · thoughtfully arranged', price: '39.90', tag: 'Our favourite', bgCard: 'bg-[#EDE8EC]', image: '/images/bouquet1.png' },
   { id: 2, title: 'Meadow Joy', description: 'Crochet flowers · thoughtfully arranged', price: '34.90', bgCard: 'bg-[#EAECE6]', image: '/images/bouquet2.png' },

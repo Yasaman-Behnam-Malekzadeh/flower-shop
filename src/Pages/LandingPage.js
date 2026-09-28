@@ -10,7 +10,7 @@ export default function LandingPage() {
   return (
     <>
       {/* 1. Hero Group */}
-      <div className="min-h-[calc(100vh-80px)] flex flex-col justify-between">
+      <div className="font-heading min-h-[calc(100vh-80px)] flex flex-col justify-between">
         <div className="flex-1 flex items-center justify-center w-full">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center w-full">
             <HeroContent />
