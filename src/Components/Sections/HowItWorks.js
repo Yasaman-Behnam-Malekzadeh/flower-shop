@@ -9,7 +9,7 @@
           {/* Left Column */}
           <div className="lg:col-span-4 flex flex-col justify-between h-full">
             <div>
-              <h2 className="text-3xl sm:text-4xl font-extrabold text-[#2B2B2B] leading-tight">
+              <h2 className="font-heading text-3xl sm:text-4xl font-extrabold text-[#2B2B2B] leading-tight">
                 Your bouquet.<br />Your little story.
               </h2>
               <p className="text-sm text-gray-600 mt-4 font-medium">

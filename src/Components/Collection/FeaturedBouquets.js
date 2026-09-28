@@ -47,7 +47,7 @@ const FeaturedBouquets = () => {
         {/* Header Title Bar */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-10 gap-4">
           <div>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-[#2B2B2B] tracking-tight">
+            <h2 className="font-heading text-3xl sm:text-4xl font-extrabold text-[#2B2B2B] tracking-tight">
               Made to fall in love with.
             </h2>
             <p className="text-sm text-gray-500 mt-2 font-medium">

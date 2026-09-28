@@ -25,9 +25,9 @@ const Navbar = () => {
           </svg>
           <Link
             to="/"
-            className="text-xl font-extrabold tracking-tight text-[#2B2B2B]"
+            className="font-heading text-xl font-extrabold tracking-tight text-[#2B2B2B]"
           >
-            JasminFlower <span className="text-[#6C5389]">•</span>
+            JasminFlower 
           </Link>
         </div>
 

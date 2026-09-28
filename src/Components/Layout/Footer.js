@@ -7,7 +7,7 @@ const Footer = () => {
         
         {/* Brand Logo */}
         <div className="text-base font-extrabold text-[#2B2B2B]">
-          JasminBlüte.
+          JasminFlower
         </div>
 
         {/* Center Note */}

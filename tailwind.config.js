@@ -9,9 +9,9 @@ export default {
         cream: "#FAF6EE",
         sage: "#E2EBE0",
       },
-    fontFamily: {
-        heading: ['Fredoka', 'sans-serif'], // فونت گرد و بولد مخصوص تیترها
-        sans: ['Plus Jakarta Sans', 'sans-serif'], // فونت بدنه
+      fontFamily: {
+        heading: ["Fredoka", "sans-serif"],
+        sans: ["Plus Jakarta Sans", "sans-serif"],
       },
     },
   },
