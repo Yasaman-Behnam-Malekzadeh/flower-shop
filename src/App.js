@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import RootLayout from "./Components/Layout/RootLayout";
 import LandingPage from "./Pages/LandingPage";
 import ShopPage from "./Pages/ShopPage";
+import BuildPage from "./Pages/BuildPage";
 
 export default function App() {
   return (
@@ -13,6 +14,7 @@ export default function App() {
         <Route element={<RootLayout />}>
           <Route path="/" element={<LandingPage />} />
           <Route path="/shop" element={<ShopPage />} />
+          <Route path="/build" element={<BuildPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
