@@ -17,7 +17,11 @@ app.add_middleware(
 class FlowerCreate(BaseModel):
     id: str
     name: str
+    description: Optional[str] = ""
     cost_price: float
+    bgCard: Optional[str] = "bg-stone-100"
+    tag: Optional[str] = ""
+    image: Optional[str] = ""
     selling_price: float
     stock: int
     color: Optional[str] = "bg-stone-200"
@@ -40,7 +44,11 @@ def init_db():
         CREATE TABLE IF NOT EXISTS flowers (
             id TEXT PRIMARY KEY,
             name TEXT NOT NULL,
+            description TEXT,
             cost_price REAL NOT NULL,
+            bgCard TEXT,
+            tag TEXT,
+            image TEXT,
             selling_price REAL NOT NULL,
             stock INTEGER NOT NULL,
             color TEXT
@@ -72,12 +80,12 @@ def init_db():
     cursor.execute("SELECT COUNT(*) FROM flowers")
     if cursor.fetchone()[0] == 0:
         sample_flowers = [
-            ("roses", "Roses", 2.20, 6.50, 50, "bg-pink-300"),
-            ("tulips", "Tulips", 1.80, 5.50, 30, "bg-purple-300"),
-            ("daisies", "Daisies", 1.20, 4.00, 100, "bg-amber-300"),
-            ("sunflowers", "Sunflowers", 2.50, 7.00, 15, "bg-amber-500"),
+            ("roses", "Roses", "Handmade crochet roses", 5.0, "bg-pink-100", "Bestseller", "/images/roses.jpg", 6.50, 50, "bg-pink-300"),
+            ("tulips", "Tulips", "Beautiful knitted tulips", 1.80, "bg-purple-100", "New", "/images/tulips.jpg", 5.50, 30, "bg-purple-300"),
+            ("daisies", "Daisies", "Charming white daisies", 1.20, "bg-amber-100", "Popular", "/images/daisies.jpg", 4.00, 100, "bg-amber-300"),
+            ("sunflowers", "Sunflowers", "Bright yellow sunflowers", 2.50, "bg-amber-100", "Hot", "/images/sunflowers.jpg", 7.00, 15, "bg-amber-500"),
         ]
-        cursor.executemany("INSERT INTO flowers VALUES (?, ?, ?, ?, ?, ?)", sample_flowers)
+        cursor.executemany("INSERT INTO flowers VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", sample_flowers)
 
     cursor.execute("SELECT COUNT(*) FROM users")
     if cursor.fetchone()[0] == 0:
@@ -92,7 +100,7 @@ init_db()
 def get_flowers():
     conn = get_db()
     cursor = conn.cursor()
-    cursor.execute("SELECT id, name, selling_price as price, cost_price, stock, color FROM flowers")
+    cursor.execute("SELECT * FROM flowers")
     rows = cursor.fetchall()
     conn.close()
     return [dict(row) for row in rows]
@@ -102,9 +110,23 @@ def add_flower(flower: FlowerCreate):
     conn = get_db()
     cursor = conn.cursor()
     try:
+        # ۳. ارسال ۱۰ علامت ? و ۱۰ مقدار متناسب با جدول
         cursor.execute(
-            "INSERT INTO flowers (id, name, cost_price, selling_price, stock, color) VALUES (?, ?, ?, ?, ?, ?)",
-            (flower.id, flower.name, flower.cost_price, flower.selling_price, flower.stock, flower.color)
+            """INSERT INTO flowers 
+               (id, name, description, cost_price, bgCard, tag, image, selling_price, stock, color) 
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+            (
+                flower.id, 
+                flower.name, 
+                flower.description, 
+                flower.cost_price, 
+                flower.bgCard, 
+                flower.tag, 
+                flower.image, 
+                flower.selling_price, 
+                flower.stock, 
+                flower.color
+            )
         )
         conn.commit()
     except sqlite3.IntegrityError:
@@ -162,3 +184,4 @@ def get_dashboard_stats():
             "total_orders": sales["total_orders_count"] or 0
         }
     }
+

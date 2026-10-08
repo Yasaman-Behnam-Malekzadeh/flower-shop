@@ -1,61 +1,21 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ShopFilterBar from "../Components/Shop/ShopFilterBar";
 import BouquetCard from "../Components/Shop/BouquetCard";
 import FeaturesBar from "../Components/Hero/FeaturesBar";
 
-const PRODUCTS = [
-  {
-    id: 1,
-    title: "Pastel Poetry",
-    description: "Crochet flowers · thoughtfully arranged",
-    price: "39.90",
-    tag: "Our favourite",
-    bgCard: "bg-[#EDE8EC]",
-    image: "/images/bouquet1.png",
-  },
-  {
-    id: 2,
-    title: "Meadow Joy",
-    description: "Crochet flowers · thoughtfully arranged",
-    price: "34.90",
-    bgCard: "bg-[#EAECE6]",
-    image: "/images/bouquet2.png",
-  },
-  {
-    id: 3,
-    title: "Little Sunshine",
-    description: "Crochet flowers · thoughtfully arranged",
-    price: "42.90",
-    bgCard: "bg-[#F5ECE2]",
-    image: "/images/bouquet3.png",
-  },
-  {
-    id: 4,
-    title: "Lavender Love",
-    description: "Crochet flowers · thoughtfully arranged",
-    price: "36.90",
-    bgCard: "bg-[#EDE8EC]",
-    image: "/images/bouquet1.png",
-  },
-  {
-    id: 5,
-    title: "Rose Wishes",
-    description: "Crochet flowers · thoughtfully arranged",
-    price: "44.90",
-    bgCard: "bg-[#F6E8E8]",
-    image: "/images/bouquet2.png",
-  },
-  {
-    id: 6,
-    title: "A Little Thank-you",
-    description: "Crochet flowers · thoughtfully arranged",
-    price: "29.90",
-    bgCard: "bg-[#EAECE6]",
-    image: "/images/bouquet3.png",
-  },
-];
-
 export default function ShopPage() {
+  const [products, setProducts] = useState([]);
+  useEffect(() => {
+    // Fetch products from the backend API
+    fetch("http://localhost:8000/api/flowers")
+      .then((response) => response.json())
+      .then((data) => {
+        setProducts(data);
+      })
+      .catch((error) => console.error("Error fetching products:", error));
+    console.log("Products state after fetch:", products);
+  }, []);
+
   return (
     <div className="w-full bg-[#FAF8F5] min-h-screen flex flex-col font-sans text-stone-800">
       {/* 1. Header Banner Area */}
@@ -115,9 +75,7 @@ export default function ShopPage() {
       <main className="max-w-7xl mx-auto px-6 sm:px-12 py-10 w-full flex-1">
         {/* Meta Bar */}
         <div className="flex items-center justify-between text-xs sm:text-sm text-stone-500 mb-8">
-          <span>
-            {PRODUCTS.length} of {PRODUCTS.length} bouquets
-          </span>
+          <span>{/* {products.length} of {products.length} bouquets */}</span>
           <div className="flex items-center gap-2">
             <span>Sort:</span>
             <select className="bg-transparent font-semibold text-stone-800 focus:outline-none cursor-pointer">
@@ -130,7 +88,7 @@ export default function ShopPage() {
 
         {/* Products Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {PRODUCTS.map((product) => (
+          {products.map((product) => (
             <BouquetCard key={product.id} item={product} />
           ))}
         </div>
