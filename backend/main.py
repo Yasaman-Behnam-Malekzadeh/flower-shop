@@ -1,17 +1,31 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+from typing import Optional
 import sqlite3
-from datetime import datetime
 
 app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3001"],
+    allow_origins=["http://localhost:3000"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+class FlowerCreate(BaseModel):
+    id: str
+    name: str
+    cost_price: float
+    selling_price: float
+    stock: int
+    color: Optional[str] = "bg-stone-200"
+
+class FlowerUpdate(BaseModel):
+    cost_price: Optional[float] = None
+    selling_price: Optional[float] = None
+    stock: Optional[int] = None
 
 def get_db():
     conn = sqlite3.connect("inventory.db")
@@ -78,10 +92,50 @@ init_db()
 def get_flowers():
     conn = get_db()
     cursor = conn.cursor()
-    cursor.execute("SELECT id, name, selling_price as price, stock, color FROM flowers")
+    cursor.execute("SELECT id, name, selling_price as price, cost_price, stock, color FROM flowers")
     rows = cursor.fetchall()
     conn.close()
     return [dict(row) for row in rows]
+
+@app.post("/api/flowers")
+def add_flower(flower: FlowerCreate):
+    conn = get_db()
+    cursor = conn.cursor()
+    try:
+        cursor.execute(
+            "INSERT INTO flowers (id, name, cost_price, selling_price, stock, color) VALUES (?, ?, ?, ?, ?, ?)",
+            (flower.id, flower.name, flower.cost_price, flower.selling_price, flower.stock, flower.color)
+        )
+        conn.commit()
+    except sqlite3.IntegrityError:
+        conn.close()
+        raise HTTPException(status_code=400, detail="Flower with this ID already exists")
+    conn.close()
+    return {"message": "Flower added successfully"}
+
+@app.patch("/api/flowers/{flower_id}")
+def update_flower_stock(flower_id: str, flower_data: FlowerUpdate):
+    conn = get_db()
+    cursor = conn.cursor()
+    
+    cursor.execute("SELECT * FROM flowers WHERE id = ?", (flower_id,))
+    existing_flower = cursor.fetchone()
+    
+    if not existing_flower:
+        conn.close()
+        raise HTTPException(status_code=404, detail="Flower not found")
+
+    new_stock = flower_data.stock if flower_data.stock is not None else existing_flower["stock"]
+    new_cost = flower_data.cost_price if flower_data.cost_price is not None else existing_flower["cost_price"]
+    new_price = flower_data.selling_price if flower_data.selling_price is not None else existing_flower["selling_price"]
+
+    cursor.execute(
+        "UPDATE flowers SET stock = ?, cost_price = ?, selling_price = ? WHERE id = ?",
+        (new_stock, new_cost, new_price, flower_id)
+    )
+    conn.commit()
+    conn.close()
+    return {"message": "Flower updated successfully"}
 
 @app.get("/api/dashboard/stats")
 def get_dashboard_stats():
