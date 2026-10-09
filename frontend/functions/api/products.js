@@ -1,25 +1,27 @@
-export default {
-  async fetch(request, env) {
-    const url = new URL(request.url);
+export async function onRequest(context) {
+  try {
+    // اتصال به دیتابیس D1 از طریق Binding
+    const { DB } = context.env;
 
-    if (url.pathname === "/api/products" || url.pathname === "/api/products/") {
-      try {
-        const { results } = await env.DB.prepare("SELECT * FROM products").all();
-        return new Response(JSON.stringify(results), {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*"
-          }
-        });
-      } catch (e) {
-        return new Response(JSON.stringify({ error: e.message }), {
-          status: 500,
-          headers: { "Content-Type": "application/json" }
-        });
-      }
+    if (!DB) {
+      return new Response(JSON.stringify({ error: "D1 Binding (DB) is missing in wrangler.toml" }), {
+        status: 500,
+        headers: { "Content-Type": "application/json" }
+      });
     }
 
-    // بازگرداندن فایل‌های استاتیک فرانت‌اند برای سایر مسیرها
-    return env.ASSETS.fetch(request);
+    const { results } = await DB.prepare("SELECT * FROM products").all();
+
+    return new Response(JSON.stringify(results), {
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*"
+      }
+    });
+  } catch (err) {
+    return new Response(JSON.stringify({ error: err.message }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" }
+    });
   }
-};
+}
