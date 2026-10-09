@@ -5,6 +5,7 @@ import FeaturesBar from "../Components/Hero/FeaturesBar";
 
 export default function ShopPage() {
   const [products, setProducts] = useState([]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     // Fetch products from the backend API
     fetch("http://localhost:8000/api/flowers")
