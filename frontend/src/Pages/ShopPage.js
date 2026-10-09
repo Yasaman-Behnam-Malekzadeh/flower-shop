@@ -7,14 +7,28 @@ export default function ShopPage() {
   const [products, setProducts] = useState([]);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-    // Fetch products from the backend API
     fetch("/api/products")
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
       .then((data) => {
-        setProducts(data);
+        const mappedProducts = data.map((item) => ({
+          id: item.id,
+          name: item.name,
+          title: item.name,
+          price: item.price,
+          description: item.description || "",
+          image: item.image_url,
+          image_url: item.image_url,
+        }));
+
+        setProducts(mappedProducts);
+        console.log("Fetched products successfully:", mappedProducts);
       })
       .catch((error) => console.error("Error fetching products:", error));
-    console.log("Products state after fetch:", products);
   }, []);
 
   return (
