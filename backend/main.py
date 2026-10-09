@@ -110,7 +110,6 @@ def add_flower(flower: FlowerCreate):
     conn = get_db()
     cursor = conn.cursor()
     try:
-        # ۳. ارسال ۱۰ علامت ? و ۱۰ مقدار متناسب با جدول
         cursor.execute(
             """INSERT INTO flowers 
                (id, name, description, cost_price, bgCard, tag, image, selling_price, stock, color) 

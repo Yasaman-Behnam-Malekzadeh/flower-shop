@@ -27,7 +27,7 @@ const Navbar = () => {
             to="/"
             className="font-heading text-xl font-extrabold tracking-tight text-[#2B2B2B]"
           >
-            JasminFlower 
+            KnitFlora
           </Link>
         </div>
 
