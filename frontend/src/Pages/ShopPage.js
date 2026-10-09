@@ -8,7 +8,7 @@ export default function ShopPage() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     // Fetch products from the backend API
-    fetch("http://localhost:8000/api/flowers")
+    fetch("/api/products")
       .then((response) => response.json())
       .then((data) => {
         setProducts(data);
