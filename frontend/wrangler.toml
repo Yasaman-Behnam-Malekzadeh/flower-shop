@@ -1,9 +1,6 @@
 name = "flower-shop"
-main = "functions/api/products.js"
+pages_build_output_dir = "./build"
 compatibility_date = "2026-10-09"
-
-[assets]
-directory = "./build"
 
 [[d1_databases]]
 binding = "DB"
