@@ -1,0 +1,7 @@
+name = "flower-shop"
+compatibility_date = "2026-10-09"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "flower_shop_db"
+database_id = "c2f2c40e-6be0-48e3-8f0e-c466ac582b10"
