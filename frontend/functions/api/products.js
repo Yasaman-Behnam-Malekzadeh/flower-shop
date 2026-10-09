@@ -1,10 +1,9 @@
 export async function onRequest(context) {
   try {
-    // اتصال به دیتابیس D1 از طریق Binding
     const { DB } = context.env;
 
     if (!DB) {
-      return new Response(JSON.stringify({ error: "D1 Binding (DB) is missing in wrangler.toml" }), {
+      return new Response(JSON.stringify({ error: "D1 database binding not found" }), {
         status: 500,
         headers: { "Content-Type": "application/json" }
       });
@@ -13,13 +12,14 @@ export async function onRequest(context) {
     const { results } = await DB.prepare("SELECT * FROM products").all();
 
     return new Response(JSON.stringify(results), {
+      status: 200,
       headers: {
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*"
       }
     });
-  } catch (err) {
-    return new Response(JSON.stringify({ error: err.message }), {
+  } catch (error) {
+    return new Response(JSON.stringify({ error: error.message }), {
       status: 500,
       headers: { "Content-Type": "application/json" }
     });
