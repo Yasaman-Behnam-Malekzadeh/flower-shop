@@ -2,7 +2,7 @@ export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
 
-    // 1. CORS Preflight
+    // 1. Handling CORS Preflight requests
     if (request.method === "OPTIONS") {
       return new Response(null, {
         status: 204,
@@ -14,7 +14,7 @@ export default {
       });
     }
 
-    // 2. API Endpoint - serve products from D1
+    // 2. API endpoint to fetch products from D1
     if (url.pathname === "/api/products") {
       try {
         const db = env?.DB;
@@ -44,18 +44,14 @@ export default {
       }
     }
 
-    // 3. Serve Frontend Assets with SPA fallback (resolves Error 1101 on /shop)
-    try {
-      const response = await env.ASSETS.fetch(request);
-      if (response.status === 404) {
-        // Fallback to index.html for client-side routing (/shop, /about, etc.)
-        const indexRequest = new Request(new URL("/index.html", request.url), request);
-        return await env.ASSETS.fetch(indexRequest);
-      }
-      return response;
-    } catch (e) {
-      const indexRequest = new Request(new URL("/index.html", request.url), request);
-      return await env.ASSETS.fetch(indexRequest);
+    // 3. Serve static frontend assets with SPA fallback
+    let response = await env.ASSETS.fetch(request);
+
+    if (response.status === 404) {
+      const indexUrl = new URL("/index.html", request.url);
+      response = await env.ASSETS.fetch(new Request(indexUrl, request));
     }
+
+    return response;
   },
 };
