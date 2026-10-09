@@ -29,7 +29,7 @@ export default function BouquetCard({ item }) {
             event.currentTarget.onerror = null;
             event.currentTarget.src = defaultImage;
           }}
-          className="w-4/5 h-4/5 object-contain"
+          className="w h object-cover"
         />
 
         {/* Quick View Button */}
