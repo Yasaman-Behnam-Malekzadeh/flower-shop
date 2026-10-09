@@ -2,7 +2,6 @@ export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
 
-    // 1. Handling CORS Preflight requests
     if (request.method === "OPTIONS") {
       return new Response(null, {
         status: 204,
@@ -14,7 +13,6 @@ export default {
       });
     }
 
-    // 2. API endpoint to fetch products from D1
     if (url.pathname === "/api/products") {
       try {
         const db = env?.DB;
@@ -44,14 +42,20 @@ export default {
       }
     }
 
-    // 3. Serve static frontend assets with SPA fallback
-    let response = await env.ASSETS.fetch(request);
-
-    if (response.status === 404) {
-      const indexUrl = new URL("/index.html", request.url);
-      response = await env.ASSETS.fetch(new Request(indexUrl, request));
+    // Safe Static Asset Handling with Fallback
+    try {
+      if (env && env.ASSETS) {
+        let response = await env.ASSETS.fetch(request);
+        if (response.status === 404) {
+          const indexUrl = new URL("/index.html", request.url);
+          response = await env.ASSETS.fetch(new Request(indexUrl, request));
+        }
+        return response;
+      } else {
+        return new Response("Assets binding not found", { status: 500 });
+      }
+    } catch (err) {
+      return new Response("Worker Asset Exception: " + err.message, { status: 500 });
     }
-
-    return response;
   },
 };
