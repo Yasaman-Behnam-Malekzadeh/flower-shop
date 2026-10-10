@@ -1,5 +1,5 @@
 name = "flower-shop"
-main = "functions/api/products.js"
+main = "worker.js"
 compatibility_date = "2026-10-09"
 
 [assets]
