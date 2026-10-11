@@ -3,13 +3,13 @@ import { Heart, ShoppingBag } from "lucide-react";
 import defaultImage from "../../assets/default-image.jpeg";
 
 export default function BouquetCard({ item }) {
-  const { name, description, cost_price, bgCard, tag, image } = item;
+  const { name, description, price, bgCard, tag, image } = item;
 
   return (
     <div className="flex flex-col group :hover: transition-shadow duration-300 bg-white rounded-2xl p-4">
       {/* Image Container */}
       <div
-        className={`relative w-full ${bgCard || "bg-cream"} aspect-square rounded-2xl p-6 flex items-center justify-center overflow-hidden transition-shadow `}
+        className={`relative w-full ${bgCard || "bg-cream"} aspect-square rounded-2xl flex items-center justify-center overflow-hidden transition-shadow `}
       >
         <button className="absolute top-4 right-4 bg-white/80 backdrop-blur-sm p-2 rounded-full text-stone-700 hover:text-red-500 transition-colors">
           <Heart className="w-4 h-4" />
@@ -53,7 +53,7 @@ export default function BouquetCard({ item }) {
         <div className="mt-4 flex items-center justify-between">
           <div>
             <span className="font-bold text-stone-900 text-base">
-              €{cost_price}
+              €{price}
             </span>
             <span className="block text-[10px] text-stone-400">
               incl. VAT, plus shipping
