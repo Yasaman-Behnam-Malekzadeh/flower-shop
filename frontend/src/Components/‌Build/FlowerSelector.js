@@ -1,20 +1,48 @@
-import React from "react";
-
-const FLOWERS = [
-  { id: "roses", name: "Roses", price: 6.5, color: "bg-pink-300" },
-  { id: "tulips", name: "Tulips", price: 5.5, color: "bg-purple-300" },
-  { id: "daisies", name: "Daisies", price: 4.0, color: "bg-amber-300" },
-  { id: "sunflowers", name: "Sunflowers", price: 7.0, color: "bg-amber-500" },
-];
+import React, { useState, useEffect } from "react";
 
 export default function FlowerSelector({ selectedFlowers, onUpdateCount }) {
+  const [flowers, setFlowers] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/products")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        const mappedFlowers = data.map((item) => ({
+          id: item.id.toString(),
+          name: item.name,
+          price: item.price,
+          image: item.image_url,
+        }));
+        setFlowers(mappedFlowers);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching flowers:", error);
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="bg-white/80 rounded-2xl p-6 shadow-sm border border-stone-100 text-center text-stone-500">
+        Loading flowers...
+      </div>
+    );
+  }
+
   return (
     <div className="bg-white/80 rounded-2xl p-6 shadow-sm border border-stone-100">
       <h3 className="font-heading text-lg font-bold text-stone-800 mb-4">
         1. Pick blooms
       </h3>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {FLOWERS.map((flower) => {
+        {flowers.map((flower) => {
           const count = selectedFlowers[flower.id] || 0;
           return (
             <div
@@ -22,12 +50,20 @@ export default function FlowerSelector({ selectedFlowers, onUpdateCount }) {
               className="flex items-center justify-between p-3.5 bg-stone-50/60 rounded-xl border border-stone-100"
             >
               <div className="flex items-center gap-3">
-                <span className={`w-8 h-8 rounded-full ${flower.color} flex items-center justify-center text-xs font-bold text-white shadow-sm`}>
-                  ✿
-                </span>
+                {flower.image ? (
+                  <img
+                    src={flower.image}
+                    alt={flower.name}
+                    className="w-10 h-10 rounded-full object-cover shadow-sm"
+                  />
+                ) : (
+                  <span className="w-8 h-8 rounded-full bg-purple-300 flex items-center justify-center text-xs font-bold text-white shadow-sm">
+                    ✿
+                  </span>
+                )}
                 <div>
                   <div className="font-semibold text-stone-800 text-sm">{flower.name}</div>
-                  <div className="text-xs text-stone-400">€{flower.price.toFixed(2)}</div>
+                  <div className="text-xs text-stone-400">€{Number(flower.price).toFixed(2)}</div>
                 </div>
               </div>
 

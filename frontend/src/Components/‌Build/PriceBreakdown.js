@@ -1,31 +1,51 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
-export default function PriceBreakdown({ state }) {
-  const totalPrice = 81.4;
+export default function PriceBreakdown({ selectedFlowers = {} }) {
+  const [flowers, setFlowers] = useState([]);
+
+  useEffect(() => {
+    fetch("/api/products")
+      .then((res) => res.json())
+      .then((data) => setFlowers(data))
+      .catch((err) => console.error("Error fetching products:", err));
+  }, []);
+
+  // Map database flowers to the ones the user selected
+  const selectedItems = flowers
+    .map((flower) => {
+      const count = selectedFlowers[flower.id] || selectedFlowers[flower.id.toString()] || 0;
+      return {
+        ...flower,
+        count,
+        subtotal: count * Number(flower.price),
+      };
+    })
+    .filter((item) => item.count > 0);
+
+  // Calculate totals (flowers + fixed wrapping/arranging extras)
+  const flowersTotal = selectedItems.reduce((acc, item) => acc + item.subtotal, 0);
+  const extrasTotal = 3.50 + 3.50 + 5.00 + 4.90; // Lavender paper, ribbon, arranging, gift wrap
+  const totalPrice = flowersTotal + (selectedItems.length > 0 ? extrasTotal : 0);
 
   return (
-    <div className="p-6 space-y-4">
+    <div className="p-6 space-y-4 bg-white/80 rounded-2xl shadow-sm border border-stone-100">
       <h4 className="font-heading text-sm font-bold text-stone-800">
         Price breakdown
       </h4>
 
       <div className="space-y-2 text-xs text-stone-600 border-b border-stone-100 pb-4">
-        <div className="flex justify-between">
-          <span>4x Roses</span>
-          <span>€26.00</span>
-        </div>
-        <div className="flex justify-between">
-          <span>3x Tulips</span>
-          <span>€16.50</span>
-        </div>
-        <div className="flex justify-between">
-          <span>2x Daisies</span>
-          <span>€8.00</span>
-        </div>
-        <div className="flex justify-between">
-          <span>2x Sunflowers</span>
-          <span>€14.00</span>
-        </div>
+        {selectedItems.length === 0 ? (
+          <div className="text-stone-400 italic">No blooms selected yet.</div>
+        ) : (
+          selectedItems.map((item) => (
+            <div key={item.id} className="flex justify-between">
+              <span>{item.count}x {item.name}</span>
+              <span>€{item.subtotal.toFixed(2)}</span>
+            </div>
+          ))
+        )}
+
+        {/* Extras */}
         <div className="flex justify-between">
           <span>Lavender paper</span>
           <span>€3.50</span>

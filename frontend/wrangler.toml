@@ -1,6 +1,10 @@
 name = "flower-shop"
 main = "worker.js"
 compatibility_date = "2026-10-09"
+routes = [
+  { pattern = "knitflora.com", custom_domain = true },
+  { pattern = "www.knitflora.com", custom_domain = true }
+]
 
 [assets]
 directory = "./build"
