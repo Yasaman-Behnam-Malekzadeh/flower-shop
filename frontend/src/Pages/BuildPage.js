@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import FlowerSelector from "../Components/Build/FlowerSelector";
-import PriceBreakdown from "../Components/Build/PriceBreakdown";
+import FlowerSelector from "../../Components/‌Build/FlowerSelector";
+import PriceBreakdown from "../../Components/‌Build/PriceBreakdown";
 
 export default function BuildPage() {
   const [selectedFlowers, setSelectedFlowers] = useState({});
