@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
+import { PAPERS } from "./PaperSelector";
 
-export default function PriceBreakdown({ selectedFlowers = {} }) {
+export default function PriceBreakdown({ selectedFlowers = {}, selectedPaper = "lavender" }) {
   const [flowers, setFlowers] = useState([]);
 
   useEffect(() => {
@@ -10,7 +11,7 @@ export default function PriceBreakdown({ selectedFlowers = {} }) {
       .catch((err) => console.error("Error fetching products:", err));
   }, []);
 
-  // Map database flowers to the ones the user selected
+  // Map database flowers to user selections
   const selectedItems = flowers
     .map((flower) => {
       const count = selectedFlowers[flower.id] || selectedFlowers[flower.id.toString()] || 0;
@@ -22,10 +23,15 @@ export default function PriceBreakdown({ selectedFlowers = {} }) {
     })
     .filter((item) => item.count > 0);
 
-  // Calculate totals (flowers + fixed wrapping/arranging extras)
+  // Find active paper object
+  const currentPaper = PAPERS.find((p) => p.id === selectedPaper) || PAPERS[2]; // Fallback to lavender
+
+  // Fixed remaining extras (Ribbon + Arranging + Gift wrap)
+  const remainingExtras = 3.50 + 5.00 + 4.90; 
+
+  // Dynamic Total Calculation
   const flowersTotal = selectedItems.reduce((acc, item) => acc + item.subtotal, 0);
-  const extrasTotal = 3.50 + 3.50 + 5.00 + 4.90; // Lavender paper, ribbon, arranging, gift wrap
-  const totalPrice = flowersTotal + (selectedItems.length > 0 ? extrasTotal : 0);
+  const totalPrice = flowersTotal + currentPaper.price + remainingExtras;
 
   return (
     <div className="p-6 space-y-4 bg-white/80 rounded-2xl shadow-sm border border-stone-100">
@@ -45,11 +51,13 @@ export default function PriceBreakdown({ selectedFlowers = {} }) {
           ))
         )}
 
-        {/* Extras */}
-        <div className="flex justify-between">
-          <span>Lavender paper</span>
-          <span>€3.50</span>
+        {/* Dynamic Paper Selection */}
+        <div className="flex justify-between font-medium text-stone-700">
+          <span>{currentPaper.name}</span>
+          <span>€{currentPaper.price.toFixed(2)}</span>
         </div>
+
+        {/* Other Extras */}
         <div className="flex justify-between">
           <span>Lace ribbon</span>
           <span>€3.50</span>

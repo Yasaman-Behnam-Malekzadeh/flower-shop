@@ -1,10 +1,10 @@
 import React from "react";
 
-const PAPERS = [
+export const PAPERS = [
   { id: "pastel-pink", name: "Pastel pink", price: 3.5, color: "bg-[#F7E5E9]" },
   { id: "kraft-paper", name: "Kraft paper", price: 2.5, color: "bg-[#E6D4C3]" },
-  { id: "lavender", name: "Lavender", price: 3.5, color: "bg-[#E6E1F0]" },
-  { id: "sky-blue", name: "Sky blue", price: 3.5, color: "bg-[#E1EFF7]" },
+  { id: "lavender", name: "Lavender paper", price: 3.5, color: "bg-[#E6E1F0]" },
+  { id: "white", name: "White paper", price: 2.0, color: "bg-white border border-stone-200" },
 ];
 
 export default function PaperSelector({ selectedPaper, onSelectPaper }) {
@@ -19,6 +19,7 @@ export default function PaperSelector({ selectedPaper, onSelectPaper }) {
           return (
             <button
               key={paper.id}
+              type="button"
               onClick={() => onSelectPaper(paper.id)}
               className={`flex flex-col items-center justify-center p-4 rounded-2xl border-2 transition-all ${
                 isSelected
