@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-import FlowerSelector from "../Components/Build/FlowerSelector";
-import PaperSelector from "../Components/Build/PaperSelector";
-import PriceBreakdown from "../Components/Build/PriceBreakdown";
-import RibbonSelector from "../Components/Build/RibbonSelector";
-import PersonalTouch from "../Components/Build/PersonalTouch";
-import LivePreview from "../Components/Build/LivePreview";
+import FlowerSelector from "../Components/‌Build/FlowerSelector";
+import PriceBreakdown from "../Components/‌Build/PriceBreakdown";
+import PaperSelector from "../Components/‌Build/PaperSelector";
+// import PaperSelector from "../Components/Build/PaperSelector";
+
+// import RibbonSelector from "../Components/Build/RibbonSelector";
+// import PersonalTouch from "../Components/Build/PersonalTouch";
+// import LivePreview from "../Components/Build/LivePreview";
 
 export default function BuildPage() {
   const [selectedFlowers, setSelectedFlowers] = useState({});
