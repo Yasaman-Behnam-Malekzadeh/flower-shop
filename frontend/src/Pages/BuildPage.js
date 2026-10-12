@@ -1,10 +1,11 @@
 import React, { useState } from "react";
+
 import FlowerSelector from "../Components/Build/FlowerSelector";
 import PaperSelector from "../Components/Build/PaperSelector";
+import PriceBreakdown from "../Components/Build/PriceBreakdown";
 import RibbonSelector from "../Components/Build/RibbonSelector";
 import PersonalTouch from "../Components/Build/PersonalTouch";
 import LivePreview from "../Components/Build/LivePreview";
-import PriceBreakdown from "../Components/Build/PriceBreakdown";
 
 export default function BuildPage() {
   const [selectedFlowers, setSelectedFlowers] = useState({});
@@ -33,12 +34,11 @@ export default function BuildPage() {
 
         {/* Main Grid: Left Options & Right Live Card */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          
           {/* Left Column: Customization Steps (7 Columns) */}
           <div className="lg:col-span-7 space-y-6">
-            <FlowerSelector 
-              selectedFlowers={selectedFlowers} 
-              onUpdateCount={handleUpdateCount} 
+            <FlowerSelector
+              selectedFlowers={selectedFlowers}
+              onUpdateCount={handleUpdateCount}
             />
 
             <PaperSelector
@@ -65,12 +65,11 @@ export default function BuildPage() {
               selectedRibbon={selectedRibbon}
             /> */}
 
-            <PriceBreakdown 
-              selectedFlowers={selectedFlowers} 
+            <PriceBreakdown
+              selectedFlowers={selectedFlowers}
               selectedPaper={selectedPaper}
             />
           </div>
-
         </div>
       </div>
     </div>
