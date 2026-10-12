@@ -2,15 +2,34 @@ import React, { useState } from "react";
 import FlowerSelector from "../Components/‌Build/FlowerSelector";
 import PriceBreakdown from "../Components/‌Build/PriceBreakdown";
 import PaperSelector from "../Components/‌Build/PaperSelector";
-// import PaperSelector from "../Components/Build/PaperSelector";
+import PersonalTouch from "../Components/‌Build/PersonalTouch";
+// import RibbonSelector from "../Components/‌Build/RibbonSelector";
 
 // import RibbonSelector from "../Components/Build/RibbonSelector";
-// import PersonalTouch from "../Components/Build/PersonalTouch";
 // import LivePreview from "../Components/Build/LivePreview";
 
 export default function BuildPage() {
   const [selectedFlowers, setSelectedFlowers] = useState({});
   const [selectedPaper, setSelectedPaper] = useState("lavender");
+
+  // 1. Greeting Card State & Handler
+  const [cardDetails, setCardDetails] = useState({
+    includeCard: false,
+    cardText: "",
+  });
+
+  const handleUpdateCardDetails = (field, value) => {
+    setCardDetails((prev) => ({ ...prev, [field]: value }));
+  };
+
+  // 2. Gift Wrap State & Handler
+  const [giftWrapDetails, setGiftWrapDetails] = useState({
+    isGiftWrapped: false,
+  });
+
+  const handleUpdateGiftWrapDetails = (field, value) => {
+    setGiftWrapDetails((prev) => ({ ...prev, [field]: value }));
+  };
 
   const handleUpdateCount = (flowerId, delta) => {
     setSelectedFlowers((prev) => {
@@ -50,12 +69,14 @@ export default function BuildPage() {
             {/* <RibbonSelector
               selectedRibbon={selectedRibbon}
               onSelectRibbon={setSelectedRibbon}
-            />
+            />*/}
 
             <PersonalTouch
-              details={personalDetails}
-              onChangeDetails={handleUpdateDetails}
-            /> */}
+              cardDetails={cardDetails}
+              onUpdateCardDetails={handleUpdateCardDetails}
+              giftWrapDetails={giftWrapDetails}
+              onUpdateGiftWrapDetails={handleUpdateGiftWrapDetails}
+            />
           </div>
 
           {/* Right Column: Sticky Live Preview & Price Breakdown (5 Columns) */}
@@ -69,6 +90,8 @@ export default function BuildPage() {
             <PriceBreakdown
               selectedFlowers={selectedFlowers}
               selectedPaper={selectedPaper}
+              cardDetails={cardDetails}
+              giftWrapDetails={giftWrapDetails}
             />
           </div>
         </div>
