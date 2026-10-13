@@ -1,7 +1,7 @@
 import React from "react";
 
 const RIBBONS = [
-  { id: "satin-red", name: "Satin red", price: 2.0, color: "bg-red-500" },
+  { id: "red", name: "Satin red", price: 2.0, color: "bg-red-500" },
   { id: "velvet-cream", name: "Velvet cream", price: 3.0, color: "bg-[#F3ECE1]" },
   { id: "lace", name: "Lace", price: 3.5, color: "bg-stone-200 border-dashed border-stone-400" },
 ];
