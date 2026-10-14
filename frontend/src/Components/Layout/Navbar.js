@@ -39,7 +39,7 @@ const Navbar = () => {
           <Link to="build" className="hover:text-black transition-colors">
             Build a bouquet
           </Link>
-          <Link to="how" className="hover:text-black transition-colors">
+          <Link to="HowItWorks" className="hover:text-black transition-colors">
             How it works
           </Link>
         </div>
