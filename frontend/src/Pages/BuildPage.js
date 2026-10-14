@@ -3,14 +3,13 @@ import FlowerSelector from "../Components/‌Build/FlowerSelector";
 import PriceBreakdown from "../Components/‌Build/PriceBreakdown";
 import PaperSelector from "../Components/‌Build/PaperSelector";
 import PersonalTouch from "../Components/‌Build/PersonalTouch";
-// import RibbonSelector from "../Components/‌Build/RibbonSelector";
 
-// import RibbonSelector from "../Components/Build/RibbonSelector";
 // import LivePreview from "../Components/Build/LivePreview";
 
 export default function BuildPage() {
   const [selectedFlowers, setSelectedFlowers] = useState({});
-  const [selectedPaper, setSelectedPaper] = useState("lavender");
+  const [selectedPaper, setSelectedPaper] = useState("none");
+  const [selectedRibbon, setSelectedRibbon] = useState("none");
 
   // 1. Greeting Card State & Handler
   const [cardDetails, setCardDetails] = useState({
@@ -66,16 +65,13 @@ export default function BuildPage() {
               onSelectPaper={setSelectedPaper}
             />
 
-            {/* <RibbonSelector
-              selectedRibbon={selectedRibbon}
-              onSelectRibbon={setSelectedRibbon}
-            />*/}
-
             <PersonalTouch
               cardDetails={cardDetails}
               onUpdateCardDetails={handleUpdateCardDetails}
               giftWrapDetails={giftWrapDetails}
               onUpdateGiftWrapDetails={handleUpdateGiftWrapDetails}
+              selectedRibbon={selectedRibbon}
+              onSelectRibbon={setSelectedRibbon}
             />
           </div>
 
@@ -90,6 +86,7 @@ export default function BuildPage() {
             <PriceBreakdown
               selectedFlowers={selectedFlowers}
               selectedPaper={selectedPaper}
+              selectedRibbon={selectedRibbon}
               cardDetails={cardDetails}
               giftWrapDetails={giftWrapDetails}
             />

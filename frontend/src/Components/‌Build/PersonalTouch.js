@@ -1,8 +1,11 @@
 import React from "react";
+import RibbonSelector from "./RibbonSelector";
 import GreetingCard from "./GreetingCard";
 import GiftWrap from "./GiftWrap";
 
 export default function PersonalTouch({
+  selectedRibbon,
+  onSelectRibbon,
   cardDetails,
   onUpdateCardDetails,
   giftWrapDetails,
@@ -14,11 +17,21 @@ export default function PersonalTouch({
         4. Personal touch
       </h3>
 
+      {/* Ribbon Selector */}
+      <RibbonSelector
+        selectedRibbon={selectedRibbon}
+        onSelectRibbon={onSelectRibbon}
+      />
+
+      <hr className="border-stone-100" />
+
       {/* Greeting Card Note */}
       <GreetingCard
         details={cardDetails}
         onChangeDetails={onUpdateCardDetails}
       />
+
+      <hr className="border-stone-100" />
 
       {/* Gift Wrap Toggle */}
       <GiftWrap

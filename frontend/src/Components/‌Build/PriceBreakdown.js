@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { PAPERS } from "./PaperSelector";
+import { RIBBONS } from "./RibbonSelector";
 
-export default function PriceBreakdown({ selectedFlowers = {}, selectedPaper = "lavender" }) {
+export default function PriceBreakdown({
+  selectedFlowers = {},
+  selectedPaper = "none",
+  selectedRibbon = "none",
+  cardDetails = { includeCard: false },
+  giftWrapDetails = { isGiftWrapped: false },
+}) {
   const [flowers, setFlowers] = useState([]);
 
   useEffect(() => {
@@ -11,10 +18,13 @@ export default function PriceBreakdown({ selectedFlowers = {}, selectedPaper = "
       .catch((err) => console.error("Error fetching products:", err));
   }, []);
 
-  // Map database flowers to user selections
+  // 1. Map database flowers to user selections
   const selectedItems = flowers
     .map((flower) => {
-      const count = selectedFlowers[flower.id] || selectedFlowers[flower.id.toString()] || 0;
+      const count =
+        selectedFlowers[flower.id] ||
+        selectedFlowers[flower.id.toString()] ||
+        0;
       return {
         ...flower,
         count,
@@ -23,15 +33,40 @@ export default function PriceBreakdown({ selectedFlowers = {}, selectedPaper = "
     })
     .filter((item) => item.count > 0);
 
-  // Find active paper object
-  const currentPaper = PAPERS.find((p) => p.id === selectedPaper) || PAPERS[2]; // Fallback to lavender
+  // 2. Find active paper and ribbon objects
+  const currentPaper = PAPERS.find((p) => p.id === selectedPaper) || {
+    id: "none",
+    name: "No paper",
+    price: 0,
+  };
 
-  // Fixed remaining extras (Ribbon + Arranging + Gift wrap)
-  const remainingExtras = 3.50 + 5.00 + 4.90; 
+  const currentRibbon = RIBBONS.find((r) => r.id === selectedRibbon) || {
+    id: "none",
+    name: "No ribbon",
+    price: 0,
+  };
 
-  // Dynamic Total Calculation
-  const flowersTotal = selectedItems.reduce((acc, item) => acc + item.subtotal, 0);
-  const totalPrice = flowersTotal + currentPaper.price + remainingExtras;
+  // 3. Dynamic Total Calculation
+  const flowersTotal = selectedItems.reduce(
+    (acc, item) => acc + item.subtotal,
+    0
+  );
+
+  const paperPrice = currentPaper.price || 0;
+  const ribbonPrice = currentRibbon.price || 0;
+  const cardPrice = cardDetails?.includeCard ? 3.5 : 0;
+  const giftWrapPrice = giftWrapDetails?.isGiftWrapped ? 4.9 : 0;
+
+  const totalPrice =
+    flowersTotal + paperPrice + ribbonPrice + cardPrice + giftWrapPrice;
+
+  // Check if any item or add-on is currently active
+  const hasItems =
+    selectedItems.length > 0 ||
+    (currentPaper.id !== "none" && currentPaper.price > 0) ||
+    (currentRibbon.id !== "none" && currentRibbon.price > 0) ||
+    cardDetails?.includeCard ||
+    giftWrapDetails?.isGiftWrapped;
 
   return (
     <div className="p-6 space-y-4 bg-white/80 rounded-2xl shadow-sm border border-stone-100">
@@ -39,37 +74,60 @@ export default function PriceBreakdown({ selectedFlowers = {}, selectedPaper = "
         Price breakdown
       </h4>
 
-      <div className="space-y-2 text-xs text-stone-600 border-b border-stone-100 pb-4">
-        {selectedItems.length === 0 ? (
-          <div className="text-stone-400 italic">No blooms selected yet.</div>
+      <div className="space-y-2.5 text-xs text-stone-600 border-b border-stone-100 pb-4">
+        {!hasItems ? (
+          <div className="text-stone-400 italic">No blooms or add-ons selected yet.</div>
         ) : (
-          selectedItems.map((item) => (
-            <div key={item.id} className="flex justify-between">
-              <span>{item.count}x {item.name}</span>
-              <span>€{item.subtotal.toFixed(2)}</span>
-            </div>
-          ))
+          <>
+            {/* Flowers List */}
+            {selectedItems.map((item) => (
+              <div key={item.id} className="flex justify-between">
+                <span>
+                  {item.count}x {item.name}
+                </span>
+                <span className="font-medium text-stone-800">
+                  €{item.subtotal.toFixed(2)}
+                </span>
+              </div>
+            ))}
+
+            {/* Selected Paper Line Item */}
+            {currentPaper.id !== "none" && (
+              <div className="flex justify-between text-stone-700">
+                <span>{currentPaper.name}</span>
+                <span className="font-medium text-stone-800">
+                  €{currentPaper.price.toFixed(2)}
+                </span>
+              </div>
+            )}
+
+            {/* Selected Ribbon Line Item */}
+            {currentRibbon.id !== "none" && (
+              <div className="flex justify-between text-stone-700">
+                <span>{currentRibbon.name} ribbon</span>
+                <span className="font-medium text-stone-800">
+                  €{currentRibbon.price.toFixed(2)}
+                </span>
+              </div>
+            )}
+
+            {/* Handwritten Card Line Item */}
+            {cardDetails?.includeCard && (
+              <div className="flex justify-between text-stone-700">
+                <span>Greeting card (handwritten)</span>
+                <span className="font-medium text-stone-800">€3.50</span>
+              </div>
+            )}
+
+            {/* Gift Wrap Line Item */}
+            {giftWrapDetails?.isGiftWrapped && (
+              <div className="flex justify-between text-stone-700">
+                <span>Gift wrap</span>
+                <span className="font-medium text-stone-800">€4.90</span>
+              </div>
+            )}
+          </>
         )}
-
-        {/* Dynamic Paper Selection */}
-        <div className="flex justify-between font-medium text-stone-700">
-          <span>{currentPaper.name}</span>
-          <span>€{currentPaper.price.toFixed(2)}</span>
-        </div>
-
-        {/* Other Extras */}
-        <div className="flex justify-between">
-          <span>Lace ribbon</span>
-          <span>€3.50</span>
-        </div>
-        <div className="flex justify-between">
-          <span>Arranging</span>
-          <span>€5.00</span>
-        </div>
-        <div className="flex justify-between">
-          <span>Gift wrap</span>
-          <span>€4.90</span>
-        </div>
       </div>
 
       <div className="flex items-center justify-between pt-1">
