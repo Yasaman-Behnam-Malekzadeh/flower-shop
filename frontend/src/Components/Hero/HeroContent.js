@@ -1,5 +1,6 @@
-import React from 'react';
-import { ArrowRight, Heart } from 'lucide-react';
+import React from "react";
+import { ArrowRight, Heart } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const HeroContent = () => {
   return (
@@ -20,15 +21,19 @@ const HeroContent = () => {
 
       {/* Description */}
       <p className="text-gray-600 text-[15px] leading-relaxed mb-8 max-w-md">
-        A little yarn. A whole lot of love. Discover handmade crochet flowers that never wilt — as one of a kind as your favourite person.
+        A little yarn. A whole lot of love. Discover handmade crochet flowers
+        that never wilt — as one of a kind as your favourite person.
       </p>
 
       {/* Primary CTA Button */}
       <div className="mb-8">
-        <button className="bg-brand-purple bg-[#584172] hover:bg-[#442e5d] text-white font-medium px-7 py-3.5 rounded-2xl flex items-center gap-3 shadow-sm">
+        <Link
+          to="build"
+          className="inline-flex items-center gap-3 bg-[#584172] hover:bg-[#442e5d] text-white font-medium px-7 py-3.5 rounded-2xl shadow-sm transition-colors w-fit"
+        >
           <span>Design your own bouquet</span>
           <ArrowRight className="w-4 h-4" />
-        </button>
+        </Link>
       </div>
 
       {/* Footer Tagline */}
