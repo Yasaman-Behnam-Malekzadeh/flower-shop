@@ -12,9 +12,24 @@ export default function PriceBreakdown({
   const [flowers, setFlowers] = useState([]);
 
   useEffect(() => {
-    fetch("/api/products")
-      .then((res) => res.json())
-      .then((data) => setFlowers(data))
+    fetch("/api/flowers")
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`Unable to load flowers (${res.status})`);
+        }
+        return res.json();
+      })
+      .then((data) => {
+        if (!Array.isArray(data)) {
+          throw new Error(data.error || "The flowers API returned invalid data");
+        }
+        setFlowers(
+          data.map((flower) => ({
+            ...flower,
+            price: flower.selling_price ?? flower.price ?? 0,
+          }))
+        );
+      })
       .catch((err) => console.error("Error fetching products:", err));
   }, []);
 

@@ -3,27 +3,33 @@ import React, { useState, useEffect } from "react";
 export default function FlowerSelector({ selectedFlowers, onUpdateCount }) {
   const [flowers, setFlowers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    fetch("/api/products")
+    fetch("/api/flowers")
       .then((response) => {
         if (!response.ok) {
-          throw new Error("Network response was not ok");
+          throw new Error(`Unable to load flowers (${response.status})`);
         }
         return response.json();
       })
       .then((data) => {
+        if (!Array.isArray(data)) {
+          throw new Error(data.error || "The flowers API returned invalid data");
+        }
         const mappedFlowers = data.map((item) => ({
           id: item.id.toString(),
           name: item.name,
-          price: item.price,
-          image: item.image_url,
+          price: item.selling_price ?? item.price ?? 0,
+          image: item.image ?? item.image_url ?? "",
         }));
         setFlowers(mappedFlowers);
-        setLoading(false);
       })
       .catch((error) => {
         console.error("Error fetching flowers:", error);
+        setError(error.message);
+      })
+      .finally(() => {
         setLoading(false);
       });
   }, []);
@@ -32,6 +38,14 @@ export default function FlowerSelector({ selectedFlowers, onUpdateCount }) {
     return (
       <div className="bg-white/80 rounded-2xl p-6 shadow-sm border border-stone-100 text-center text-stone-500">
         Loading flowers...
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="bg-white/80 rounded-2xl p-6 shadow-sm border border-stone-100 text-center text-red-600">
+        {error}. Check that the backend is running.
       </div>
     );
   }
