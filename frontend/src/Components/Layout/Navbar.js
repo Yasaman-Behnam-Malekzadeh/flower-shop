@@ -33,13 +33,13 @@ const Navbar = () => {
 
         {/* Center Navigation Links */}
         <div className="hidden md:flex items-center gap-8 text-sm font-medium text-[#4A4A4A]">
-          <Link to="shop" className="hover:text-black transition-colors">
+          <Link to="/shop" className="hover:text-black transition-colors">
             Shop bouquets
           </Link>
-          <Link to="build" className="hover:text-black transition-colors">
+          <Link to="/build" className="hover:text-black transition-colors">
             Build a bouquet
           </Link>
-          <Link to="HowItWorks" className="hover:text-black transition-colors">
+          <Link to="/HowItWorks" className="hover:text-black transition-colors">
             How it works
           </Link>
         </div>
@@ -66,12 +66,14 @@ const Navbar = () => {
             <Heart className="w-5 h-5 stroke-[1.8]" />
           </button>
 
-          <button
-            className="text-[#2B2B2B] hover:text-black transition-colors p-1"
+          {/* Linked User Icon to Login page */}
+          <Link
+            to="/login"
+            className="text-[#2B2B2B] hover:text-black transition-colors p-1 flex items-center"
             aria-label="Account"
           >
             <User className="w-5 h-5 stroke-[1.8]" />
-          </button>
+          </Link>
 
           {/* Cart Icon with Counter */}
           <button
