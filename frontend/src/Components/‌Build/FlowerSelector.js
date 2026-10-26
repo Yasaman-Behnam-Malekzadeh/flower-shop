@@ -6,7 +6,7 @@ export default function FlowerSelector({ selectedFlowers, onUpdateCount }) {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    fetch("/api/flowers")
+    fetch("/api/products")
       .then((response) => {
         if (!response.ok) {
           throw new Error(`Unable to load flowers (${response.status})`);
@@ -20,7 +20,7 @@ export default function FlowerSelector({ selectedFlowers, onUpdateCount }) {
         const mappedFlowers = data.map((item) => ({
           id: item.id.toString(),
           name: item.name,
-          price: item.selling_price ?? item.price ?? 0,
+          price: item.price ?? item.selling_price ?? 0,
           image: item.image ?? item.image_url ?? "",
         }));
         setFlowers(mappedFlowers);
@@ -45,7 +45,7 @@ export default function FlowerSelector({ selectedFlowers, onUpdateCount }) {
   if (error) {
     return (
       <div className="bg-white/80 rounded-2xl p-6 shadow-sm border border-stone-100 text-center text-red-600">
-        {error}. Check that the backend is running.
+        {error}. Please try again later.
       </div>
     );
   }
