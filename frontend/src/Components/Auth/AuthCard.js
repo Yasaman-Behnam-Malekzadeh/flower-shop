@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import AuthTabSwitch from "./AuthTabSwitch";
 import FormInput from "./FormInput";
+import { useNavigate } from "react-router-dom";
 
 export default function AuthCard() {
   const [activeTab, setActiveTab] = useState("login");
@@ -14,9 +15,11 @@ export default function AuthCard() {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
+  const navigate = useNavigate();
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(`Submitting ${activeTab}:`, formData);
+    navigate("/account");
   };
 
   return (
