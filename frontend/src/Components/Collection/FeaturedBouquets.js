@@ -1,5 +1,6 @@
 import React from 'react';
 import ProductCard from './ProductCard';
+import { Link } from 'react-router-dom';
 
 const products = [
   {
@@ -55,12 +56,12 @@ const FeaturedBouquets = () => {
             </p>
           </div>
 
-          <a 
-            href="#all-bouquets" 
+          <Link 
+            to="/shop"
             className="text-xs font-semibold text-[#2B2B2B] underline underline-offset-4 hover:opacity-75 transition-opacity self-start sm:self-auto"
           >
             Explore all bouquets
-          </a>
+          </Link>
         </div>
 
         {/* 4-Column Product Grid */}

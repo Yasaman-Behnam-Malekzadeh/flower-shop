@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('KnitFlora Landing Page Tests', () => {
   test.beforeEach(async ({ page }) => {
-    // Navigate to local dev server before each test
+    
     await page.goto('http://localhost:3000/');
   });
 
@@ -62,5 +62,31 @@ test.describe('KnitFlora Landing Page Tests', () => {
     await expect(page.getByText(/Every bloom is unique/i)).toBeVisible();
     await expect(page.getByText(/Joy that never wilts/i)).toBeVisible();
     await expect(page.getByText(/Wrapped with love/i)).toBeVisible();
+  });
+  test('should display the product list and allow interacting with items', async ({ page }) => {
+    // 1. Check section header
+    await expect(
+      page.getByRole('heading', { name: /Made to fall in love with\./i })
+    ).toBeVisible();
+
+    // 2. Locate all product cards in the list (assuming they share a common card structure or class/test-id)
+    // Adjust the locator to match your product card container (e.g., article, or a specific wrapper class)
+    const productCards = page.locator('div > .bg-white, article, [class*="card"]');
+    
+    // Ensure the list has items loaded
+    const count = await productCards.count();
+    expect(count).toBeGreaterThan(0);
+
+    // 3. Click on the first item in the list to view details
+    const firstProduct = productCards.first();
+    await firstProduct.click();
+
+    // Or if you have an "Explore all bouquets" / "See all items" link to view the full catalog:
+    const exploreLink = page.getByRole('link', { name: /Explore all bouquets|See all/i });
+    if (await exploreLink.isVisible()) {
+      await exploreLink.click();
+      // eslint-disable-next-line jest/no-conditional-expect
+      await expect(page).toHaveURL(/.*shop/);
+    }
   });
 });
