@@ -2,14 +2,72 @@ var __defProp = Object.defineProperty;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
 
 // worker.js
-var worker_default = {
+async function hashPassword(password) {
+  const iterations = 1e5;
+  const salt = crypto.getRandomValues(new Uint8Array(16));
+  const key = await crypto.subtle.importKey(
+    "raw",
+    new TextEncoder().encode(password),
+    "PBKDF2",
+    false,
+    ["deriveBits"]
+  );
+  const hash = new Uint8Array(
+    await crypto.subtle.deriveBits(
+      { name: "PBKDF2", hash: "SHA-256", salt, iterations },
+      key,
+      256
+    )
+  );
+  const toHex = /* @__PURE__ */ __name((bytes) => Array.from(bytes, (byte) => byte.toString(16).padStart(2, "0")).join(""), "toHex");
+  return `pbkdf2$${iterations}$${toHex(salt)}$${toHex(hash)}`;
+}
+__name(hashPassword, "hashPassword");
+async function verifyPassword(password, storedHash) {
+  const [algorithm, iterationsText, saltHex, expectedHash] = storedHash.split("$");
+  if (algorithm !== "pbkdf2" || !iterationsText || !saltHex || !expectedHash) {
+    return false;
+  }
+  const fromHex = /* @__PURE__ */ __name((hex) => new Uint8Array(hex.match(/.{2}/g).map((byte) => parseInt(byte, 16))), "fromHex");
+  const salt = fromHex(saltHex);
+  const iterations = Number(iterationsText);
+  if (!Number.isInteger(iterations) || iterations < 1) return false;
+  const key = await crypto.subtle.importKey(
+    "raw",
+    new TextEncoder().encode(password),
+    "PBKDF2",
+    false,
+    ["deriveBits"]
+  );
+  const hash = new Uint8Array(
+    await crypto.subtle.deriveBits(
+      { name: "PBKDF2", hash: "SHA-256", salt, iterations },
+      key,
+      256
+    )
+  );
+  const actualHash = Array.from(
+    hash,
+    (byte) => byte.toString(16).padStart(2, "0")
+  ).join("");
+  return actualHash === expectedHash;
+}
+__name(verifyPassword, "verifyPassword");
+var corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization"
+};
+function jsonResponse(data, status = 200) {
+  return Response.json(data, {
+    status,
+    headers: corsHeaders
+  });
+}
+__name(jsonResponse, "jsonResponse");
+var worker = {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
-    const corsHeaders = {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type, Authorization"
-    };
     if (request.method === "OPTIONS") {
       return new Response(null, { headers: corsHeaders });
     }
@@ -17,92 +75,86 @@ var worker_default = {
       try {
         const { email, password, name } = await request.json();
         if (!email || !password) {
-          return Response.json(
-            { error: "Email and password are required." },
-            { status: 400, headers: corsHeaders }
-          );
+          return jsonResponse({ error: "Email and password are required." }, 400);
         }
+        const normalizedEmail = email.toLowerCase().trim();
         const existingUser = await env.DB.prepare(
           "SELECT id FROM users WHERE email = ?"
-        ).bind(email.toLowerCase().trim()).first();
+        ).bind(normalizedEmail).first();
         if (existingUser) {
-          return Response.json(
-            { error: "An account with this email already exists." },
-            { status: 409, headers: corsHeaders }
-          );
+          return jsonResponse({ error: "An account with this email already exists." }, 409);
         }
         const userId = crypto.randomUUID();
+        const passwordHash = await hashPassword(password);
         await env.DB.prepare(
           "INSERT INTO users (id, email, password_hash, name) VALUES (?, ?, ?, ?)"
-        ).bind(userId, email.toLowerCase().trim(), password, name || "").run();
-        return Response.json(
+        ).bind(userId, normalizedEmail, passwordHash, name || "").run();
+        return jsonResponse(
           {
             success: true,
-            user: { id: userId, email: email.toLowerCase().trim(), name: name || "" },
+            user: {
+              id: userId,
+              email: normalizedEmail,
+              name: name || ""
+            },
             token: `token_${userId}_${Date.now()}`
           },
-          { status: 201, headers: corsHeaders }
+          201
         );
       } catch (e) {
-        return Response.json(
-          { error: e.message || "Failed to register user." },
-          { status: 500, headers: corsHeaders }
-        );
+        return jsonResponse({ error: e.message || "Failed to register user." }, 500);
       }
     }
     if (url.pathname === "/api/login" && request.method === "POST") {
       try {
         const { email, password } = await request.json();
         if (!email || !password) {
-          return Response.json(
-            { error: "Email and password are required." },
-            { status: 400, headers: corsHeaders }
-          );
+          return jsonResponse({ error: "Email and password are required." }, 400);
         }
+        const normalizedEmail = email.toLowerCase().trim();
         const user = await env.DB.prepare(
           "SELECT id, email, password_hash, name FROM users WHERE email = ?"
-        ).bind(email.toLowerCase().trim()).first();
-        if (!user || user.password_hash !== password) {
-          return Response.json(
-            { error: "Invalid email or password." },
-            { status: 401, headers: corsHeaders }
-          );
+        ).bind(normalizedEmail).first();
+        const isLegacyPassword = user && typeof user.password_hash === "string" && !user.password_hash.startsWith("pbkdf2$") && user.password_hash === password;
+        if (!user || !isLegacyPassword && !await verifyPassword(password, user.password_hash)) {
+          return jsonResponse({ error: "Invalid email or password." }, 401);
         }
-        return Response.json(
-          {
-            success: true,
-            user: { id: user.id, email: user.email, name: user.name },
-            token: `token_${user.id}_${Date.now()}`
-          },
-          { status: 200, headers: corsHeaders }
-        );
+        if (isLegacyPassword) {
+          await env.DB.prepare(
+            "UPDATE users SET password_hash = ? WHERE id = ?"
+          ).bind(await hashPassword(password), user.id).run();
+        }
+        return jsonResponse({
+          success: true,
+          user: { id: user.id, email: user.email, name: user.name },
+          token: `token_${user.id}_${Date.now()}`
+        });
       } catch (e) {
-        return Response.json(
-          { error: e.message || "Failed to log in." },
-          { status: 500, headers: corsHeaders }
-        );
+        return jsonResponse({ error: e.message || "Failed to log in." }, 500);
       }
     }
     if (url.pathname.startsWith("/api/products") || url.pathname.startsWith("/api/bouquets")) {
       try {
         const { results } = await env.DB.prepare("SELECT * FROM products").all();
-        return Response.json(results, { headers: corsHeaders });
+        return jsonResponse(results);
       } catch (e) {
-        return Response.json({ error: e.message }, { status: 500, headers: corsHeaders });
+        return jsonResponse({ error: e.message }, 500);
       }
     }
     if (url.pathname.startsWith("/api/flowers")) {
       try {
         const { results } = await env.DB.prepare("SELECT * FROM flowers").all();
-        return Response.json(results, { headers: corsHeaders });
+        return jsonResponse(results);
       } catch (e) {
-        return Response.json({ error: e.message }, { status: 500, headers: corsHeaders });
+        return jsonResponse({ error: e.message }, 500);
       }
     }
     try {
       let response = await env.ASSETS.fetch(request);
       if (response.status === 404 && !url.pathname.includes(".")) {
-        return await env.ASSETS.fetch(new Request(`${url.origin}/index.html`, request));
+        return await env.ASSETS.fetch(
+          new Request(`${url.origin}/index.html`, request)
+        );
       }
       return response;
     } catch (e) {
@@ -110,6 +162,7 @@ var worker_default = {
     }
   }
 };
+var worker_default = worker;
 
 // ../../../../.npm/_npx/32026684e21afda6/node_modules/wrangler/templates/middleware/middleware-ensure-req-body-drained.ts
 var drainBody = /* @__PURE__ */ __name(async (request, env, _ctx, middlewareCtx) => {
@@ -210,31 +263,31 @@ var __Facade_ScheduledController__ = class ___Facade_ScheduledController__ {
     this.#noRetry();
   }
 };
-function wrapExportedHandler(worker) {
+function wrapExportedHandler(worker2) {
   if (__INTERNAL_WRANGLER_MIDDLEWARE__ === void 0 || __INTERNAL_WRANGLER_MIDDLEWARE__.length === 0) {
-    return worker;
+    return worker2;
   }
   for (const middleware of __INTERNAL_WRANGLER_MIDDLEWARE__) {
     __facade_register__(middleware);
   }
   const fetchDispatcher = /* @__PURE__ */ __name(function(request, env, ctx) {
-    if (worker.fetch === void 0) {
+    if (worker2.fetch === void 0) {
       throw new Error("Handler does not export a fetch() function.");
     }
-    return worker.fetch(request, env, ctx);
+    return worker2.fetch(request, env, ctx);
   }, "fetchDispatcher");
   return {
-    ...worker,
+    ...worker2,
     fetch(request, env, ctx) {
       const dispatcher = /* @__PURE__ */ __name(function(type, init) {
-        if (type === "scheduled" && worker.scheduled !== void 0) {
+        if (type === "scheduled" && worker2.scheduled !== void 0) {
           const controller = new __Facade_ScheduledController__(
             Date.now(),
             init.cron ?? "",
             () => {
             }
           );
-          return worker.scheduled(controller, env, ctx);
+          return worker2.scheduled(controller, env, ctx);
         }
       }, "dispatcher");
       return __facade_invoke__(request, env, ctx, dispatcher, fetchDispatcher);
