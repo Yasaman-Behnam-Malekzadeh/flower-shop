@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import ShopFilterBar from "../Components/Shop/ShopFilterBar";
 import BouquetCard from "../Components/Shop/BouquetCard";
 import FeaturesBar from "../Components/Hero/FeaturesBar";
+import { Link } from "react-router-dom";
 
 export default function ShopPage() {
   const [products, setProducts] = useState([]);
@@ -119,9 +120,9 @@ export default function ShopPage() {
               one-of-a-kind bouquet.
             </p>
           </div>
-          <button className="bg-[#6C5389] text-white text-xs sm:text-sm font-semibold px-6 py-3 rounded-xl hover:bg-[#584272] transition-colors whitespace-nowrap">
+          <Link to="/build" className="bg-[#6C5389] text-white text-xs sm:text-sm font-semibold px-6 py-3 rounded-xl hover:bg-[#584272] transition-colors whitespace-nowrap">
             Design your bouquet
-          </button>
+          </Link>
         </div>
       </main>
     </div>
