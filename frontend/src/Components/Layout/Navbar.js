@@ -1,8 +1,54 @@
-import React from "react";
-import { Search, Heart, User, ShoppingBag } from "lucide-react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react";
+import { Search, Heart, User, ShoppingBag, LogOut, Package, UserCheck } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
+  const [user, setUser] = useState(null);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+  const navigate = useNavigate();
+
+  // Check login state on mount and handle clicks outside to close dropdown
+  useEffect(() => {
+    const checkUser = () => {
+      const storedUser = localStorage.getItem("user");
+      if (storedUser) {
+        try {
+          setUser(JSON.parse(storedUser));
+        } catch (e) {
+          setUser(null);
+        }
+      } else {
+        setUser(null);
+      }
+    };
+
+    checkUser();
+
+    // Listen to storage changes (e.g. login/logout from other tabs or components)
+    window.addEventListener("storage", checkUser);
+
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      window.removeEventListener("storage", checkUser);
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    setUser(null);
+    setDropdownOpen(false);
+    navigate("/login");
+  };
+
   return (
     <header className="w-full font-sans">
       {/* Main Navigation Bar */}
@@ -66,14 +112,64 @@ const Navbar = () => {
             <Heart className="w-5 h-5 stroke-[1.8]" />
           </button>
 
-          {/* Linked User Icon to Login page */}
-          <Link
-            to="/login"
-            className="text-[#2B2B2B] hover:text-black transition-colors p-1 flex items-center"
-            aria-label="Account"
-          >
-            <User className="w-5 h-5 stroke-[1.8]" />
-          </Link>
+          {/* User Account Menu / Button */}
+          <div className="relative" ref={dropdownRef}>
+            <button
+              onClick={() => {
+                if (!user) {
+                  navigate("/login");
+                } else {
+                  setDropdownOpen(!dropdownOpen);
+                }
+              }}
+              className="text-[#2B2B2B] hover:text-black transition-colors p-1 flex items-center focus:outline-none"
+              aria-label="Account"
+            >
+              <User className="w-5 h-5 stroke-[1.8]" />
+            </button>
+
+            {/* Dropdown Menu when Logged In */}
+            {user && dropdownOpen && (
+              <div className="absolute right-0 mt-3 w-60 bg-white border border-gray-200 rounded-2xl shadow-xl py-2 z-50 animate-fadeIn">
+                <div className="px-4 py-3 border-b border-gray-100 bg-gray-50/50 rounded-t-2xl">
+                  <p className="text-xs text-gray-500 font-medium">Signed in as</p>
+                  <p className="text-sm font-bold text-[#2B2B2B] truncate">{user.email}</p>
+                </div>
+
+                <div className="py-1">
+                  <Link
+                    to="/profile"
+                    onClick={() => setDropdownOpen(false)}
+                    className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-900 transition-colors"
+                  >
+                    <UserCheck className="w-4 h-4 text-purple-700" />
+                    <span>Profile & Address</span>
+                  </Link>
+
+                  <Link
+                    to="/dashboard"
+                    onClick={() => setDropdownOpen(false)}
+                    className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-900 transition-colors"
+                  >
+                    <Package className="w-4 h-4 text-purple-700" />
+                    <span>Dashboard & Orders</span>
+                  </Link>
+                </div>
+
+                <div className="border-t border-gray-100 my-1"></div>
+
+                <div className="py-1">
+                  <button
+                    onClick={handleLogout}
+                    className="w-full flex items-center gap-3 text-left px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    <span>Log Out</span>
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
 
           {/* Cart Icon with Counter */}
           <button
