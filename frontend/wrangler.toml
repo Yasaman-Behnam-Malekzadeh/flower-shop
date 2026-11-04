@@ -1,18 +1,11 @@
 name = "flower-shop"
 main = "worker.js"
-compatibility_date = "2026-10-09"
+compatibility_date = "2026-11-03"
 
-routes = [
-  { pattern = "knitflora.com", custom_domain = true },
-  { pattern = "www.knitflora.com", custom_domain = true }
-]
-
-[assets]
-directory = "./build"
-binding = "ASSETS"
-not_found_handling = "single-page-application"
+[vars]
+# ... your vars if any ...
 
 [[d1_databases]]
 binding = "DB"
 database_name = "flower_shop_db"
-database_id = "c2f2c40e-6be0-48e3-8f0e-c466ac582b10"
+database_id = "your-database-id-here"

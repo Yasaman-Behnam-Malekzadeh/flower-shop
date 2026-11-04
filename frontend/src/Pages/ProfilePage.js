@@ -9,7 +9,9 @@ export default function ProfilePage() {
     address: "",
   });
   const [success, setSuccess] = useState(false);
+  const [error, setError] = useState("");
 
+  // Load user from localStorage or session on mount
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
@@ -29,25 +31,51 @@ export default function ProfilePage() {
     setProfile({ ...profile, [e.target.name]: e.target.value });
   };
 
-  const handleSave = (e) => {
+  const handleSave = async (e) => {
     e.preventDefault();
-    localStorage.setItem("user", JSON.stringify(profile));
-    setSuccess(true);
-    setTimeout(() => setSuccess(false), 3000);
+    setError("");
+
+    try {
+      const response = await fetch("/api/profile", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(profile),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        // Update localStorage with the latest data returned from D1 database
+        localStorage.setItem("user", JSON.stringify(data.user));
+        setProfile(data.user);
+        setSuccess(true);
+        setTimeout(() => setSuccess(false), 3000);
+      } else {
+        setError(data.error || "Failed to update profile in database.");
+      }
+    } catch (err) {
+      setError("Network error. Could not connect to server.");
+    }
   };
 
   return (
     <div className="min-h-screen bg-[#FDFBF7] py-10 px-6 sm:px-12 font-sans">
       <div className="max-w-xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-3xl font-extrabold text-[#2B2B2B]">Profile & Address</h1>
+          <h1 className="text-3xl font-extrabold text-[#2B2B2B]">Profile & Delivery</h1>
           <p className="text-gray-500 text-sm mt-1">Manage your personal information and default shipping destination.</p>
         </div>
 
         {success && (
           <div className="mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-xl text-sm flex items-center gap-2">
             <CheckCircle2 className="w-5 h-5 text-green-600" />
-            Profile updated successfully!
+            Profile updated successfully in database!
+          </div>
+        )}
+
+        {error && (
+          <div className="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm">
+            {error}
           </div>
         )}
 
@@ -112,7 +140,7 @@ export default function ProfilePage() {
             type="submit"
             className="w-full bg-[#2B2B2B] text-white py-3.5 rounded-xl text-sm font-semibold hover:bg-black transition-colors shadow-sm"
           >
-            Save Changes
+            Save Changes to Database
           </button>
         </form>
       </div>

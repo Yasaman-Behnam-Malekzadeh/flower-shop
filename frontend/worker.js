@@ -2,7 +2,6 @@
 // Helper Functions (Crypto & Responses)
 // =============================================================================
 
-// PBKDF2 Password Hashing
 async function hashPassword(password) {
   const iterations = 100000;
   const salt = crypto.getRandomValues(new Uint8Array(16));
@@ -26,7 +25,6 @@ async function hashPassword(password) {
   return `pbkdf2$${iterations}$${toHex(salt)}$${toHex(hash)}`;
 }
 
-// PBKDF2 Password Verification
 async function verifyPassword(password, storedHash) {
   const [algorithm, iterationsText, saltHex, expectedHash] = storedHash.split("$");
   if (algorithm !== "pbkdf2" || !iterationsText || !saltHex || !expectedHash) {
@@ -60,14 +58,12 @@ async function verifyPassword(password, storedHash) {
   return actualHash === expectedHash;
 }
 
-// Standard CORS Headers
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type, Authorization",
 };
 
-// Helper to return standardized JSON responses with CORS headers
 function jsonResponse(data, status = 200) {
   return Response.json(data, {
     status,
@@ -79,23 +75,22 @@ function jsonResponse(data, status = 200) {
 // Main Worker Fetch Handler
 // =============================================================================
 
-const worker = {
+export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
 
-    // 1. Handle CORS preflight OPTIONS request
     if (request.method === "OPTIONS") {
       return new Response(null, { headers: corsHeaders });
     }
 
     // -------------------------------------------------------------
-    // 2. Authentication API Routes
+    // 1. Authentication API Routes
     // -------------------------------------------------------------
 
     // POST /api/register
     if (url.pathname === "/api/register" && request.method === "POST") {
       try {
-        const { email, password, name } = await request.json();
+        const { email, password, name, phone, address } = await request.json();
 
         if (!email || !password) {
           return jsonResponse({ error: "Email and password are required." }, 400);
@@ -103,7 +98,6 @@ const worker = {
 
         const normalizedEmail = email.toLowerCase().trim();
 
-        // Check if user already exists
         const existingUser = await env.DB.prepare(
           "SELECT id FROM users WHERE email = ?"
         )
@@ -117,11 +111,17 @@ const worker = {
         const userId = crypto.randomUUID();
         const passwordHash = await hashPassword(password);
 
-        // Insert new user into D1 database
         await env.DB.prepare(
-          "INSERT INTO users (id, email, password_hash, name) VALUES (?, ?, ?, ?)"
+          "INSERT INTO users (id, email, password_hash, name, phone, address) VALUES (?, ?, ?, ?, ?, ?)"
         )
-          .bind(userId, normalizedEmail, passwordHash, name || "")
+          .bind(
+            userId,
+            normalizedEmail,
+            passwordHash,
+            name || "",
+            phone || "",
+            address || ""
+          )
           .run();
 
         return jsonResponse(
@@ -131,6 +131,8 @@ const worker = {
               id: userId,
               email: normalizedEmail,
               name: name || "",
+              phone: phone || "",
+              address: address || "",
             },
             token: `token_${userId}_${Date.now()}`,
           },
@@ -152,9 +154,8 @@ const worker = {
 
         const normalizedEmail = email.toLowerCase().trim();
 
-        // Fetch user from D1 database
         const user = await env.DB.prepare(
-          "SELECT id, email, password_hash, name FROM users WHERE email = ?"
+          "SELECT id, email, password_hash, name, phone, address FROM users WHERE email = ?"
         )
           .bind(normalizedEmail)
           .first();
@@ -172,7 +173,6 @@ const worker = {
           return jsonResponse({ error: "Invalid email or password." }, 401);
         }
 
-        // Auto-upgrade accounts created before PBKDF2 salted password hashes were implemented
         if (isLegacyPassword) {
           await env.DB.prepare(
             "UPDATE users SET password_hash = ? WHERE id = ?"
@@ -183,11 +183,51 @@ const worker = {
 
         return jsonResponse({
           success: true,
-          user: { id: user.id, email: user.email, name: user.name },
+          user: {
+            id: user.id,
+            email: user.email,
+            name: user.name || "",
+            phone: user.phone || "",
+            address: user.address || "",
+          },
           token: `token_${user.id}_${Date.now()}`,
         });
       } catch (e) {
         return jsonResponse({ error: e.message || "Failed to log in." }, 500);
+      }
+    }
+
+    // -------------------------------------------------------------
+    // 2. Profile Update Route (PUT /api/profile)
+    // -------------------------------------------------------------
+    if (url.pathname === "/api/profile" && request.method === "PUT") {
+      try {
+        const { email, name, phone, address } = await request.json();
+
+        if (!email) {
+          return jsonResponse({ error: "Email is required to update profile." }, 400);
+        }
+
+        const normalizedEmail = email.toLowerCase().trim();
+
+        await env.DB.prepare(
+          "UPDATE users SET name = ?, phone = ?, address = ? WHERE email = ?"
+        )
+          .bind(name || "", phone || "", address || "", normalizedEmail)
+          .run();
+
+        const updatedUser = await env.DB.prepare(
+          "SELECT id, email, name, phone, address FROM users WHERE email = ?"
+        )
+          .bind(normalizedEmail)
+          .first();
+
+        return jsonResponse({
+          success: true,
+          user: updatedUser,
+        });
+      } catch (e) {
+        return jsonResponse({ error: e.message || "Failed to update profile." }, 500);
       }
     }
 
@@ -231,5 +271,3 @@ const worker = {
     }
   },
 };
-
-export default worker;
