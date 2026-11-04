@@ -18,8 +18,8 @@ export default function ProfilePage() {
         setProfile({
           name: parsed.name || "",
           email: parsed.email || "",
-          phone: parsed.phone || "+49 ",
-          address: parsed.address || "Zeesen, Königs Wusterhausen, Germany",
+          phone: parsed.phone || "",
+          address: parsed.address || "",
         });
       } catch (e) {}
     }
@@ -40,7 +40,7 @@ export default function ProfilePage() {
     <div className="min-h-screen bg-[#FDFBF7] py-10 px-6 sm:px-12 font-sans">
       <div className="max-w-xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-3xl font-extrabold text-[#2B2B2B]">Profile & Delivery</h1>
+          <h1 className="text-3xl font-extrabold text-[#2B2B2B]">Profile & Address</h1>
           <p className="text-gray-500 text-sm mt-1">Manage your personal information and default shipping destination.</p>
         </div>
 
