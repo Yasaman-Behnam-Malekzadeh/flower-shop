@@ -8,6 +8,7 @@ import BuildPage from "./Pages/BuildPage";
 import HowItWorks from "./Pages/HowItWorksPage";
 import LoginPage from "./Components/Auth/LoginPage";
 import AccountPage from "./Components/Account/AccountPage";
+import ProfilePage from "./Pages/ProfilePage";
 
 export default function App() {
   return (
@@ -21,6 +22,7 @@ export default function App() {
           <Route path="HowItWorks" element={<HowItWorks />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/account" element={<AccountPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
         </Route>
       </Routes>
     </BrowserRouter>
