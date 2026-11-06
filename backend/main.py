@@ -2,7 +2,17 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Optional
+import os
+import json
 import sqlite3
+from openai import OpenAI
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
+
+# Initialize OpenAI Client
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 app = FastAPI()
 
@@ -30,6 +40,9 @@ class FlowerUpdate(BaseModel):
     cost_price: Optional[float] = None
     selling_price: Optional[float] = None
     stock: Optional[int] = None
+
+class AIPromptRequest(BaseModel):
+    prompt: str
 
 def get_db():
     conn = sqlite3.connect("inventory.db")
@@ -184,3 +197,50 @@ def get_dashboard_stats():
         }
     }
 
+@app.post("/api/ai-florist")
+def ai_florist_advisor(request: AIPromptRequest):
+    if not os.getenv("OPENAI_API_KEY"):
+        raise HTTPException(status_code=500, detail="OpenAI API key not found in environment variables.")
+
+    # Fetch available flowers from SQLite inventory database
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("SELECT id, name, description, image, stock FROM flowers WHERE stock > 0")
+    available_flowers = [dict(row) for row in cursor.fetchall()]
+    conn.close()
+
+    if not available_flowers:
+        raise HTTPException(status_code=400, detail="No flowers available in inventory.")
+
+    try:
+        system_prompt = f"""
+        You are an expert knitted bouquet designer and helpful assistant for KnitFlora. 
+        You speak very friendly and artistically.
+        
+        CRITICAL CONSTRAINT: You must ONLY recommend flowers from our AVAILABLE INVENTORY provided below. 
+        Do NOT invent or suggest any items not present in this list.
+
+        AVAILABLE INVENTORY:
+        {json.dumps(available_flowers, indent=2)}
+
+        You must respond strictly in valid JSON format with the following keys:
+        - 'title' (string): Creative bouquet name.
+        - 'reasoning' (string): Friendly explanation of why this fits the occasion.
+        - 'recommendedBlooms' (list of objects): Each object must include 'id', 'name', 'image', and 'quantity' (integer).
+        - 'recommendedPaper' (string): Recommended wrapping style.
+        """
+
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": request.prompt}
+            ],
+            response_format={"type": "json_object"}
+        )
+        
+        ai_content = response.choices[0].message.content
+        return json.loads(ai_content)
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

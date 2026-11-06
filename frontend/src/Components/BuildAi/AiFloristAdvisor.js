@@ -10,40 +10,27 @@ export default function AiFloristAdvisor({ onApplySuggestion }) {
     if (!prompt.trim()) return;
 
     setLoading(true);
+    setResult(null);
 
     try {
-      // Try fetching from backend endpoint
-      const response = await fetch("/api/ai-florist", {
+      const response = await fetch("http://localhost:8000/api/ai-florist", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prompt }),
       });
 
-      if (!response.ok) throw new Error("Backend unavailable");
+      if (!response.ok) {
+        throw new Error("Failed to fetch AI recommendation from backend.");
+      }
 
       const data = await response.json();
       setResult(data);
     } catch (error) {
-      console.warn("Backend API not connected yet, using mockup AI response:", error);
-
-      // Local mock response to test UI rendering
-      setTimeout(() => {
-        setResult({
-          title: "Romantic Rose Birthday Bouquet",
-          reasoning:
-            "A rich and elegant selection featuring handcrafted crochet roses, paired with warm kraft wrapping for a classic birthday surprise.",
-          recommendedBlooms: [
-            { id: "rose_l", name: "Rose (L)", quantity: 3 },
-            { id: "rose_m", name: "Rose (M)", quantity: 2 },
-          ],
-          recommendedPaper: "Kraft paper",
-        });
-        setLoading(false);
-      }, 1000);
-      return;
+      console.error("Error connecting to AI backend:", error);
+      alert("Error connecting to AI backend. Please check your server.");
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   return (
@@ -84,31 +71,40 @@ export default function AiFloristAdvisor({ onApplySuggestion }) {
         </button>
       </form>
 
-      {/* Render AI recommendation result card */}
       {result && (
         <div className="mt-8 p-6 bg-purple-50/50 rounded-2xl border border-purple-100 animate-fadeIn">
           <h3 className="text-lg font-bold text-[#584172] mb-2">{result.title}</h3>
           <p className="text-stone-600 text-sm mb-4 leading-relaxed">{result.reasoning}</p>
 
-          <div className="space-y-2 mb-6">
+          <div className="space-y-3 mb-6">
             <h4 className="text-xs font-semibold text-stone-400 uppercase tracking-wider">
-              Suggested items:
+              Suggested items from inventory:
             </h4>
-            <div className="flex flex-wrap gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {result.recommendedBlooms?.map((item, idx) => (
-                <span
+                <div
                   key={idx}
-                  className="bg-white px-3 py-1.5 rounded-xl border border-purple-100 text-xs font-medium text-stone-700 shadow-sm"
+                  className="bg-white p-2.5 rounded-2xl border border-purple-100 flex items-center gap-3 shadow-sm"
                 >
-                  {item.quantity}x {item.name}
-                </span>
+                  {item.image && (
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      className="w-12 h-12 rounded-xl object-cover bg-stone-100"
+                    />
+                  )}
+                  <div>
+                    <p className="text-xs font-bold text-stone-800">{item.name}</p>
+                    <p className="text-[11px] text-purple-600 font-medium">Quantity: {item.quantity}</p>
+                  </div>
+                </div>
               ))}
-              {result.recommendedPaper && (
-                <span className="bg-white px-3 py-1.5 rounded-xl border border-purple-100 text-xs font-medium text-stone-700 shadow-sm">
-                  Paper: {result.recommendedPaper}
-                </span>
-              )}
             </div>
+            {result.recommendedPaper && (
+              <div className="bg-white px-3 py-2 rounded-xl border border-purple-100 text-xs font-medium text-stone-700 shadow-sm inline-block">
+                Wrapping Paper: {result.recommendedPaper}
+              </div>
+            )}
           </div>
 
           <div className="flex gap-3">
