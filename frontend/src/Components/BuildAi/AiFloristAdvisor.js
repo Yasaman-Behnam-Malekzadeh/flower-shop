@@ -13,7 +13,7 @@ export default function AiFloristAdvisor({ onApplySuggestion }) {
     setResult(null);
 
     try {
-      const response = await fetch("http://localhost:8000/api/ai-florist", {
+      const response = await fetch("/api/ai-florist", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prompt }),

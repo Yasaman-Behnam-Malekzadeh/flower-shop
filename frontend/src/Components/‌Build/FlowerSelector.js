@@ -6,7 +6,7 @@ export default function FlowerSelector({ selectedFlowers, onUpdateCount }) {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    fetch("/api/products")
+    fetch("/api/flowers")
       .then((response) => {
         if (!response.ok) {
           throw new Error(`Unable to load flowers (${response.status})`);

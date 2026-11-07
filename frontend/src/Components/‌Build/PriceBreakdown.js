@@ -12,7 +12,7 @@ export default function PriceBreakdown({
   const [flowers, setFlowers] = useState([]);
 
   useEffect(() => {
-    fetch("/api/products")
+    fetch("/products")
       .then((res) => {
         if (!res.ok) {
           throw new Error(`Unable to load flowers (${res.status})`);

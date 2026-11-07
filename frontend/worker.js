@@ -60,7 +60,7 @@ async function verifyPassword(password, storedHash) {
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "GET, POST, PUT, OPTIONS",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type, Authorization",
 };
 
@@ -232,31 +232,143 @@ export default {
     }
 
     // -------------------------------------------------------------
-    // 3. Product & Flower API Routes
+    // 3. AI Florist Advisor Route (POST /api/ai-florist)
+    // -------------------------------------------------------------
+    if (url.pathname === "/api/ai-florist" && request.method === "POST") {
+      try {
+        const { prompt } = await request.json();
+        if (!prompt) {
+          return jsonResponse({ error: "Prompt is required." }, 400);
+        }
+
+        if (!env.OPENAI_API_KEY) {
+          return jsonResponse({ error: "OpenAI API key not configured on worker." }, 500);
+        }
+
+        const { results: availableFlowers } = await env.DB.prepare(
+          "SELECT id, name, price, description, image_url FROM products"
+        ).all();
+
+        if (!availableFlowers || availableFlowers.length === 0) {
+          return jsonResponse({ error: "No flowers available in inventory." }, 400);
+        }
+
+        const systemPrompt = `
+        You are an expert knitted bouquet designer and helpful assistant for KnitFlora. 
+        You speak very friendly and artistically.
+        
+        CRITICAL SECURITY & TOPIC GUARDRAIL:
+        You must ONLY answer questions or prompts related to flowers, knitted bouquets, colors, wrapping paper, ribbons, or gift occasions (such as birthdays, anniversaries, or celebrating a wife/family member). 
+        If the user asks about anything unrelated (such as coding, math, general trivia, politics, or unrelated topics), you must IGNORE the request and respond strictly with:
+        - title: "Please ask me about which bouquet you would like!"
+        - reasoning: "I'm your KnitFlora AI assistant, and I can only help you design and customize your knitted bouquets and greeting cards."
+        - recommendedBlooms: []
+        - recommendedPaper: "none"
+        - recommendedRibbon: "none"
+        - greetingCardMessage: ""
+
+        SPECIAL OCCASION INSTRUCTIONS:
+        If the user mentions a special occasion like a wife's birthday, anniversary, or romantic milestone:
+        1. Select appropriate flowers from the available inventory.
+        2. Choose a matching wrapping paper ID ('pastel', 'kraft', 'lavender', or 'white').
+        3. Choose a matching ribbon ID ('satin', 'velvet', or 'lace').
+        4. Write a sweet, romantic, personalized greeting card message suitable for the occasion.
+
+        CRITICAL INVENTORY CONSTRAINT: 
+        You must ONLY recommend flower IDs and items present in our AVAILABLE INVENTORY provided below. 
+        Do NOT invent or suggest any items not present in this list.
+
+        AVAILABLE INVENTORY:
+        ${JSON.stringify(availableFlowers, null, 2)}
+
+        You must respond strictly in valid JSON format with the following keys:
+        - 'title' (string): Creative bouquet name.
+        - 'reasoning' (string): Friendly explanation of why this fits the occasion.
+        - 'recommendedBlooms' (list of objects): Each object must include 'id', 'name', 'image' (use image_url value), and 'quantity' (integer).
+        - 'recommendedPaper' (string): Must be one of the exact paper IDs if possible ('pastel', 'kraft', 'lavender', 'white', or 'none').
+        - 'recommendedRibbon' (string): Must be one of the exact ribbon IDs if possible ('satin', 'velvet', 'lace', or 'none').
+        - 'greetingCardMessage' (string): A sweet, heartfelt message written for the greeting card (or empty string if not applicable).
+        `;
+
+        const openAiRes = await fetch("https://api.openai.com/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${env.OPENAI_API_KEY}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            model: "gpt-4o-mini",
+            messages: [
+              { role: "system", content: systemPrompt },
+              { role: "user", content: prompt }
+            ],
+            response_format: { type: "json_object" }
+          })
+        });
+
+        if (!openAiRes.ok) {
+          const errData = await openAiRes.text();
+          throw new Error(`OpenAI API error: ${errData}`);
+        }
+
+        const aiData = await openAiRes.json();
+        const content = JSON.parse(aiData.choices[0].message.content);
+        return jsonResponse(content);
+      } catch (e) {
+        return jsonResponse({ error: e.message || "Failed to generate AI recommendation." }, 500);
+      }
+    }
+
+    // -------------------------------------------------------------
+    // 4. Product & Flower API Routes
     // -------------------------------------------------------------
     if (
+      url.pathname === "/api/products" ||
+      url.pathname === "/products" ||
       url.pathname.startsWith("/api/products") ||
-      url.pathname.startsWith("/api/bouquets")
+      url.pathname.startsWith("/api/bouquets") ||
+      url.pathname === "/api/flowers" ||
+      url.pathname.startsWith("/api/flowers")
     ) {
       try {
         const { results } = await env.DB.prepare("SELECT * FROM products").all();
-        return jsonResponse(results);
-      } catch (e) {
-        return jsonResponse({ error: e.message }, 500);
-      }
-    }
-
-    if (url.pathname.startsWith("/api/flowers")) {
-      try {
-        const { results } = await env.DB.prepare("SELECT * FROM flowers").all();
-        return jsonResponse(results);
+        const mapped = (results || []).map((item) => ({
+          ...item,
+          image: item.image_url || item.image || "",
+          selling_price: item.price || item.selling_price || 0,
+        }));
+        return jsonResponse(mapped);
       } catch (e) {
         return jsonResponse({ error: e.message }, 500);
       }
     }
 
     // -------------------------------------------------------------
-    // 4. Fallback to static assets for React client-side routing
+    // 5. Papers API Route
+    // -------------------------------------------------------------
+    if (url.pathname === "/api/papers" || url.pathname.startsWith("/api/papers")) {
+      try {
+        const { results } = await env.DB.prepare("SELECT * FROM papers").all();
+        return jsonResponse(results || []);
+      } catch (e) {
+        return jsonResponse({ error: e.message }, 500);
+      }
+    }
+
+    // -------------------------------------------------------------
+    // 6. Ribbons API Route
+    // -------------------------------------------------------------
+    if (url.pathname === "/api/ribbons" || url.pathname.startsWith("/api/ribbons")) {
+      try {
+        const { results } = await env.DB.prepare("SELECT * FROM ribbons").all();
+        return jsonResponse(results || []);
+      } catch (e) {
+        return jsonResponse({ error: e.message }, 500);
+      }
+    }
+
+    // -------------------------------------------------------------
+    // 7. Fallback to static assets for React client-side routing
     // -------------------------------------------------------------
     try {
       let response = await env.ASSETS.fetch(request);

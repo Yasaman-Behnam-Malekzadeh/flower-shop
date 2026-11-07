@@ -5,10 +5,7 @@ import PaperSelector from "../Components/\u200cBuild/PaperSelector";
 import PersonalTouch from "../Components/\u200cBuild/PersonalTouch";
 import AiFloristAdvisor from "../Components/BuildAi/AiFloristAdvisor";
 
-// import LivePreview from "../Components/Build/LivePreview";
-
 export default function BuildPage() {
-  // State for toggling between manual builder and AI advisor mode
   const [activeTab, setActiveTab] = useState("manual"); // "manual" | "ai"
 
   const [selectedFlowers, setSelectedFlowers] = useState({});
@@ -42,24 +39,58 @@ export default function BuildPage() {
     });
   };
 
-  // Handler to apply AI suggestion back into the manual builder state and switch views
- const handleAiSuggestionApply = (aiData) => {
-  if (aiData.recommendedBlooms) {
-    const updatedFlowers = {};
-    aiData.recommendedBlooms.forEach((bloom) => {
-      // Map recommended quantities directly to flower state
-      updatedFlowers[bloom.id] = bloom.quantity;
-    });
-    setSelectedFlowers(updatedFlowers);
-  }
+  // Robust handler to apply AI suggestions for flowers, paper, ribbon, and card messages
+  const handleAiSuggestionApply = (aiData) => {
+    // 1. Load recommended blooms
+    if (aiData.recommendedBlooms) {
+      const updatedFlowers = {};
+      aiData.recommendedBlooms.forEach((bloom) => {
+        updatedFlowers[bloom.id] = bloom.quantity;
+      });
+      setSelectedFlowers(updatedFlowers);
+    }
 
-  if (aiData.recommendedPaper) {
-    setSelectedPaper("kraft"); // Or set matching paper ID
-  }
+    // 2. Apply recommended paper with intelligent fallback matching
+    if (aiData.recommendedPaper) {
+      const paperRaw = aiData.recommendedPaper.toLowerCase();
+      if (paperRaw.includes("pastel") || paperRaw.includes("pink")) {
+        setSelectedPaper("pastel");
+      } else if (paperRaw.includes("kraft") || paperRaw.includes("brown")) {
+        setSelectedPaper("kraft");
+      } else if (paperRaw.includes("lavender") || paperRaw.includes("purple")) {
+        setSelectedPaper("lavender");
+      } else if (paperRaw.includes("white")) {
+        setSelectedPaper("white");
+      } else {
+        setSelectedPaper("none");
+      }
+    }
 
-  // Switch tab back to manual builder view
-  setActiveTab("manual");
-};
+    // 3. Apply recommended ribbon with intelligent fallback matching
+    if (aiData.recommendedRibbon) {
+      const ribbonRaw = aiData.recommendedRibbon.toLowerCase();
+      if (ribbonRaw.includes("satin") || ribbonRaw.includes("red")) {
+        setSelectedRibbon("satin");
+      } else if (ribbonRaw.includes("velvet") || ribbonRaw.includes("cream")) {
+        setSelectedRibbon("velvet");
+      } else if (ribbonRaw.includes("lace")) {
+        setSelectedRibbon("lace");
+      } else {
+        setSelectedRibbon("none");
+      }
+    }
+
+    // 4. Auto-fill greeting card message and enable card toggle
+    if (aiData.greetingCardMessage && aiData.greetingCardMessage.trim() !== "") {
+      setCardDetails({
+        includeCard: true,
+        cardText: aiData.greetingCardMessage,
+      });
+    }
+
+    // Switch view back to manual builder
+    setActiveTab("manual");
+  };
 
   return (
     <div className="w-full bg-[#FAF8F5] min-h-screen py-10 px-4 sm:px-8 font-sans text-stone-800">
@@ -131,12 +162,6 @@ export default function BuildPage() {
 
             {/* Right Column: Sticky Live Preview & Price Breakdown (5 Columns) */}
             <div className="lg:col-span-5 lg:sticky lg:top-8 bg-white/90 rounded-3xl p-3 shadow-sm border border-stone-100">
-              {/* <LivePreview
-                selectedFlowers={selectedFlowers}
-                selectedPaper={selectedPaper}
-                selectedRibbon={selectedRibbon}
-              /> */}
-
               <PriceBreakdown
                 selectedFlowers={selectedFlowers}
                 selectedPaper={selectedPaper}
