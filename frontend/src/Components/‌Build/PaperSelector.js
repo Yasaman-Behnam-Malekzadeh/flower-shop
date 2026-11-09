@@ -1,31 +1,31 @@
 import React from "react";
-
-export const PAPERS = [
-  { id: "pastel-pink", name: "Pastel pink", price: 3.5, color: "bg-[#F7E5E9]" },
-  { id: "kraft-paper", name: "Kraft paper", price: 2.5, color: "bg-[#E6D4C3]" },
-  { id: "lavender", name: "Lavender paper", price: 3.5, color: "bg-[#E6E1F0]" },
-  {
-    id: "white",
-    name: "White paper",
-    price: 2.0,
-    color: "bg-white border border-stone-200",
-  },
-  {
-    id: "none",
-    name: "No paper",
-    price: 0.0,
-    color: "bg-transparent border border-stone-200",
-  },
-];
+import { useEffect , useState } from "react";
 
 export default function PaperSelector({ selectedPaper, onSelectPaper }) {
+
+  const [papers, setPapers] = useState([]);
+
+  useEffect (() => {
+    fetch("/api/papers")
+      .then ((response) => response.json())
+      .then ((data) => {
+        const mappedPapers = data.map((item) => ({
+          id : item.id,
+          name : item.name,
+          price : item.price
+        }))
+        setPapers(mappedPapers)
+      })
+      .catch((error) => console.error("Error fetching papers:", error))
+  })
+
   return (
     <div className="bg-white/80 rounded-2xl p-6 shadow-sm border border-stone-100">
       <h3 className="font-heading text-lg font-bold text-stone-800 mb-4">
         2. Paper
       </h3>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        {PAPERS.map((paper) => {
+        {papers.map((paper) => {
           const isSelected = selectedPaper === paper.id;
           return (
             <button
@@ -38,9 +38,6 @@ export default function PaperSelector({ selectedPaper, onSelectPaper }) {
                   : "border-transparent bg-stone-50/60 hover:bg-stone-100/80"
               }`}
             >
-              <div
-                className={`w-12 h-12 rounded-lg ${paper.color} mb-3 shadow-inner`}
-              />
               <span className="text-xs font-semibold text-stone-800">
                 {paper.name}
               </span>
