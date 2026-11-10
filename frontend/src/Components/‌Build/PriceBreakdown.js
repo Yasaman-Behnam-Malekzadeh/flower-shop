@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { PAPERS } from "./PaperSelector";
-import { RIBBONS } from "./RibbonSelector";
 
 export default function PriceBreakdown({
   selectedFlowers = {},
@@ -10,27 +8,38 @@ export default function PriceBreakdown({
   giftWrapDetails = { isGiftWrapped: false },
 }) {
   const [flowers, setFlowers] = useState([]);
+  const [papers, setPapers] = useState([]);
+  const [ribbons, setRibbons] = useState([]);
 
+  // Fetch flowers, papers, and ribbons dynamically from the backend API
   useEffect(() => {
     fetch("/products")
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error(`Unable to load flowers (${res.status})`);
-        }
-        return res.json();
-      })
+      .then((res) => res.json())
       .then((data) => {
-        if (!Array.isArray(data)) {
-          throw new Error(data.error || "The flowers API returned invalid data");
+        if (Array.isArray(data)) {
+          setFlowers(
+            data.map((flower) => ({
+              ...flower,
+              price: flower.price ?? flower.selling_price ?? 0,
+            }))
+          );
         }
-        setFlowers(
-          data.map((flower) => ({
-            ...flower,
-            price: flower.price ?? flower.selling_price ?? 0,
-          }))
-        );
       })
       .catch((err) => console.error("Error fetching products:", err));
+
+    fetch("/api/papers")
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data)) setPapers(data);
+      })
+      .catch((err) => console.error("Error fetching papers:", err));
+
+    fetch("/api/ribbons")
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data)) setRibbons(data);
+      })
+      .catch((err) => console.error("Error fetching ribbons:", err));
   }, []);
 
   // 1. Map database flowers to user selections
@@ -48,14 +57,14 @@ export default function PriceBreakdown({
     })
     .filter((item) => item.count > 0);
 
-  // 2. Find active paper and ribbon objects
-  const currentPaper = PAPERS.find((p) => p.id === selectedPaper) || {
+  // 2. Find active paper and ribbon objects from state
+  const currentPaper = papers.find((p) => p.id === selectedPaper) || {
     id: "none",
     name: "No paper",
     price: 0,
   };
 
-  const currentRibbon = RIBBONS.find((r) => r.id === selectedRibbon) || {
+  const currentRibbon = ribbons.find((r) => r.id === selectedRibbon) || {
     id: "none",
     name: "No ribbon",
     price: 0,

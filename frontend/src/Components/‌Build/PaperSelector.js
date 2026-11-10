@@ -1,23 +1,22 @@
 import React from "react";
-import { useEffect , useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function PaperSelector({ selectedPaper, onSelectPaper }) {
-
   const [papers, setPapers] = useState([]);
 
-  useEffect (() => {
+  useEffect(() => {
     fetch("/api/papers")
-      .then ((response) => response.json())
-      .then ((data) => {
+      .then((response) => response.json())
+      .then((data) => {
         const mappedPapers = data.map((item) => ({
-          id : item.id,
-          name : item.name,
-          price : item.price
-        }))
-        setPapers(mappedPapers)
+          id: item.id,
+          name: item.name,
+          price: item.price,
+        }));
+        setPapers(mappedPapers);
       })
-      .catch((error) => console.error("Error fetching papers:", error))
-  })
+      .catch((error) => console.error("Error fetching papers:", error));
+  }, []);
 
   return (
     <div className="bg-white/80 rounded-2xl p-6 shadow-sm border border-stone-100">
@@ -51,5 +50,3 @@ export default function PaperSelector({ selectedPaper, onSelectPaper }) {
     </div>
   );
 }
-
-export { PaperSelector };
