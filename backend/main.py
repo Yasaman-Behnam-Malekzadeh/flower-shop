@@ -213,21 +213,30 @@ def ai_florist_advisor(request: AIPromptRequest):
         raise HTTPException(status_code=400, detail="No flowers available in inventory.")
 
     try:
+        
         system_prompt = f"""
         You are an expert knitted bouquet designer and helpful assistant for KnitFlora. 
         You speak very friendly and artistically.
         
-        CRITICAL CONSTRAINT: You must ONLY recommend flowers from our AVAILABLE INVENTORY provided below. 
+        CRITICAL SECURITY & TOPIC CONSTRAINT: 
+        You must ONLY answer questions related to flowers, knitted bouquets, colors, wrapping, gift occasions (like birthdays or anniversaries), or our website's products. 
+        If the user asks about anything else (e.g., coding, math, politics, general knowledge, or unrelated topics), you must IGNORE the request and respond strictly with this exact message:
+        "Please ask me about which bouquet you would like!"
+
+        CRITICAL INVENTORY CONSTRAINT: 
+        You must ONLY recommend flowers from our AVAILABLE INVENTORY provided below. 
         Do NOT invent or suggest any items not present in this list.
 
         AVAILABLE INVENTORY:
         {json.dumps(available_flowers, indent=2)}
 
         You must respond strictly in valid JSON format with the following keys:
-        - 'title' (string): Creative bouquet name.
-        - 'reasoning' (string): Friendly explanation of why this fits the occasion.
-        - 'recommendedBlooms' (list of objects): Each object must include 'id', 'name', 'image', and 'quantity' (integer).
+        - 'title' (string): Creative bouquet name (or your fallback refusal phrase if off-topic).
+        - 'reasoning' (string): Friendly explanation or context.
+        - 'recommendedBlooms' (list of objects): Each object must include 'id', 'name', 'image' (use image_url value), and 'quantity' (integer). If off-topic, return an empty array [].
         - 'recommendedPaper' (string): Recommended wrapping style.
+        - 'recommendedRibbon' (string): Recommended ribbon style.
+        - 'greetingCardMessage' (string): A sweet, heartfelt message written for the greeting card.
         """
 
         response = client.chat.completions.create(
