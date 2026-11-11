@@ -27,7 +27,8 @@ flower-shop/
 │       └── Components/       # Modular UI components (Build, Hero, Cart, etc.)
 ├── tests/                    # End-to-end automated tests
 ├── playwright.config.ts      # Playwright test runner configuration
-└── wrangler.jsonc            # Cloudflare deployment & D1 bindings config
+└── wrangler.jsonc            # Cloudflare deployment & D1 bindings config 
+```
 
 
 ## 4- Local Setup & Installation
