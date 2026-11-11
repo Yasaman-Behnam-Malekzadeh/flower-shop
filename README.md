@@ -38,25 +38,30 @@ Follow these steps to run **KnitFlora** locally on your machine:
 ```bash
 git clone [https://github.com/Yasaman-Behnam-Malekzadeh/flower-shop.git](https://github.com/Yasaman-Behnam-Malekzadeh/flower-shop.git)
 cd flower-shop
+```
 
 ### 2. Install Dependencies
 ```bash
 npm install
 cd frontend
 npm install
+```
 
-###3. Configure Environment Variables & Cloudflare Bindings
+### 3. Configure Environment Variables & Cloudflare Bindings
 
 Create a .dev.vars file inside the frontend/ directory for local Cloudflare Pages development and add your OpenAI API key:
 ```bash
 OPENAI_API_KEY=your_openai_api_key_here
+```
 
-###4. Run the Local Development Server
+### 4. Run the Local Development Server
 From the frontend/ directory, build the React app and start the local Cloudflare Pages environment:
 ```bash
 npm run build
 npx wrangler pages dev build
+```
 
-###5. Run Automated Tests (Optional)
+### 5. Run Automated Tests (Optional)
 ```bash
 npx playwright test
+```
