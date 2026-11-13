@@ -1,10 +1,12 @@
 {
   "nav": {
-    "home": "Startseite",
+    "shop": "Sträuße kaufen",
     "build": "Strauß gestalten",
-    "ai_florist": "KI-Florist",
-    "cart": "Warenkorb",
-    "login": "Anmelden"
+    "how-it-works": "Wie es funktioniert",
+    "signed_in_as": "Angemeldet als",
+    "login": "Anmelden",
+    "dashboard": "Dashboard",
+    "logout": "Abmelden"
   },
   "hero": {
     "title": "Handgehäkelte Blumensträuße für die Ewigkeit",

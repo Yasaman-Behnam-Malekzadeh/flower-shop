@@ -117,7 +117,6 @@ const Navbar = ({ selectedFlowers = {}, onUpdateCount }) => {
 
           {/* Right Utility Bar */}
           <div className="flex items-center gap-5">
-            {/* Interactive Language Switcher Pill */}
             <button
               type="button"
               onClick={toggleLanguage}

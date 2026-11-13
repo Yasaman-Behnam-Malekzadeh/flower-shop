@@ -1,10 +1,12 @@
 {
   "nav": {
-    "home": "Home",
+    "shop": "Shop bouquets",
     "build": "Build a Bouquet",
-    "ai_florist": "AI Florist",
-    "cart": "Cart",
-    "login": "Login"
+    "how-it-works": "How it Works",
+    "signed_in_as": "Signed in as",
+    "login": "Login",
+    "dashboard": "Dashboard",
+    "logout": "Logout"
   },
   "hero": {
     "title": "Handmade Crochet Bouquets That Last Forever",
