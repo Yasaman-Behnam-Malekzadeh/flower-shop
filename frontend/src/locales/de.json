@@ -1,0 +1,14 @@
+{
+  "nav": {
+    "home": "Startseite",
+    "build": "Strauß gestalten",
+    "ai_florist": "KI-Florist",
+    "cart": "Warenkorb",
+    "login": "Anmelden"
+  },
+  "hero": {
+    "title": "Handgehäkelte Blumensträuße für die Ewigkeit",
+    "subtitle": "Individuelle Arrangements, Stiel für Stiel mit Liebe gefertigt.",
+    "cta": "Jetzt gestalten"
+  }
+}

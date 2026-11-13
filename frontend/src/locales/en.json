@@ -1,0 +1,14 @@
+{
+  "nav": {
+    "home": "Home",
+    "build": "Build a Bouquet",
+    "ai_florist": "AI Florist",
+    "cart": "Cart",
+    "login": "Login"
+  },
+  "hero": {
+    "title": "Handmade Crochet Bouquets That Last Forever",
+    "subtitle": "Custom stem-by-stem arrangements crafted with love.",
+    "cta": "Start Designing"
+  }
+}

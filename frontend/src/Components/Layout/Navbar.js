@@ -9,14 +9,22 @@ import {
   UserCheck,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import CartDrawer from "../‌Build/CartDrawer";
+// import CartDrawer from "../Build/CartDrawer";
+import { useTranslation } from "react-i18next";
 
 const Navbar = ({ selectedFlowers = {}, onUpdateCount }) => {
+  const { t, i18n } = useTranslation();
+  const isGerman = i18n.language?.startsWith("de");
+
   const [user, setUser] = useState(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
+
+  const toggleLanguage = () => {
+    i18n.changeLanguage(isGerman ? "en" : "de");
+  };
 
   // Calculate total items for badge counter
   const totalCartCount = Object.values(selectedFlowers).reduce(
@@ -40,8 +48,6 @@ const Navbar = ({ selectedFlowers = {}, onUpdateCount }) => {
     };
 
     checkUser();
-
-    // Listen to storage changes (e.g. login/logout from other tabs or components)
     window.addEventListener("storage", checkUser);
 
     const handleClickOutside = (event) => {
@@ -72,7 +78,6 @@ const Navbar = ({ selectedFlowers = {}, onUpdateCount }) => {
         <nav className="bg-cream border-b border-gray-300 px-6 sm:px-12 py-4 flex items-center justify-between">
           {/* Brand Logo */}
           <div className="flex items-center gap-2">
-            {/* Flower Icon SVG */}
             <svg
               className="w-6 h-6 text-[#2B2B2B]"
               viewBox="0 0 24 24"
@@ -83,7 +88,7 @@ const Navbar = ({ selectedFlowers = {}, onUpdateCount }) => {
               <path d="M12 2a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4z" />
               <path d="M6 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4z" />
               <path d="M18 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4z" />
-              <path d="M12 14a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0 4-4z" />
+              <path d="M12 14a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4z" />
               <circle cx="12" cy="10" r="2" fill="currentColor" />
             </svg>
             <Link
@@ -97,25 +102,42 @@ const Navbar = ({ selectedFlowers = {}, onUpdateCount }) => {
           {/* Center Navigation Links */}
           <div className="hidden md:flex items-center gap-8 text-sm font-medium text-[#4A4A4A]">
             <Link to="/shop" className="hover:text-black transition-colors">
-              Shop bouquets
+              {t("nav.shop", "Shop bouquets")}
             </Link>
             <Link to="/build" className="hover:text-black transition-colors">
-              Build a bouquet
+              {t("nav.build", "Build a bouquet")}
             </Link>
             <Link
               to="/HowItWorks"
               className="hover:text-black transition-colors"
             >
-              How it works
+              {t("nav.how_it_works", "How it works")}
             </Link>
           </div>
 
           {/* Right Utility Bar */}
           <div className="flex items-center gap-5">
-            {/* Language Switcher Pill */}
-            <div className="bg-[#EFECE6] text-[#2B2B2B] text-xs font-semibold px-3 py-1.5 rounded-full cursor-pointer hover:bg-gray-200 transition-colors">
-              EN / DE
-            </div>
+            {/* Interactive Language Switcher Pill */}
+            <button
+              type="button"
+              onClick={toggleLanguage}
+              className="bg-[#EFECE6] text-[#2B2B2B] text-xs font-semibold px-3 py-1.5 rounded-full cursor-pointer hover:bg-gray-200 transition-colors"
+              aria-label="Switch language"
+            >
+              <span
+                className={
+                  !isGerman ? "font-extrabold underline" : "opacity-60"
+                }
+              >
+                EN
+              </span>
+              {" / "}
+              <span
+                className={isGerman ? "font-extrabold underline" : "opacity-60"}
+              >
+                DE
+              </span>
+            </button>
 
             {/* Action Icons */}
             <button
@@ -153,7 +175,7 @@ const Navbar = ({ selectedFlowers = {}, onUpdateCount }) => {
                 <div className="absolute right-0 mt-3 w-60 bg-white border border-gray-200 rounded-2xl shadow-xl py-2 z-50 animate-fadeIn">
                   <div className="px-4 py-3 border-b border-gray-100 bg-gray-50/50 rounded-t-2xl">
                     <p className="text-xs text-gray-500 font-medium">
-                      Signed in as
+                      {t("nav.signed_in_as", "Signed in as")}
                     </p>
                     <p className="text-sm font-bold text-[#2B2B2B] truncate">
                       {user.email}
@@ -167,7 +189,7 @@ const Navbar = ({ selectedFlowers = {}, onUpdateCount }) => {
                       className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-900 transition-colors"
                     >
                       <UserCheck className="w-4 h-4 text-purple-700" />
-                      <span>Profile & Address</span>
+                      <span>{t("nav.profile", "Profile & Address")}</span>
                     </Link>
 
                     <Link
@@ -176,7 +198,7 @@ const Navbar = ({ selectedFlowers = {}, onUpdateCount }) => {
                       className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-900 transition-colors"
                     >
                       <Package className="w-4 h-4 text-purple-700" />
-                      <span>Dashboard & Orders</span>
+                      <span>{t("nav.dashboard", "Dashboard & Orders")}</span>
                     </Link>
                   </div>
 
@@ -188,7 +210,7 @@ const Navbar = ({ selectedFlowers = {}, onUpdateCount }) => {
                       className="w-full flex items-center gap-3 text-left px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors"
                     >
                       <LogOut className="w-4 h-4" />
-                      <span>Log Out</span>
+                      <span>{t("nav.logout", "Log Out")}</span>
                     </button>
                   </div>
                 </div>
@@ -213,12 +235,12 @@ const Navbar = ({ selectedFlowers = {}, onUpdateCount }) => {
       </header>
 
       {/* Slide-Out Cart Drawer */}
-      <CartDrawer
+      {/* <CartDrawer
         isOpen={cartOpen}
         onClose={() => setCartOpen(false)}
         cartItems={selectedFlowers}
         onUpdateCount={onUpdateCount}
-      />
+      /> */}
     </>
   );
 };
