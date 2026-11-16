@@ -1,7 +1,7 @@
 import React from "react";
 import { ArrowRight, Heart } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useTranslation } from "react-i18next";
+import { useTranslation, Trans } from "react-i18next";
 
 const HeroContent = () => {
   const { t } = useTranslation();
@@ -17,7 +17,7 @@ const HeroContent = () => {
 
       {/* Main Heading */}
       <h1 className="text-5xl md:text-6xl font-extrabold text-[#2B2B2B] leading-[1.1] mb-6">
-        {t("hero.title")}
+        <Trans i18nKey="hero.title" components={{ br: <br /> }} />
       </h1>
 
       {/* Description */}
