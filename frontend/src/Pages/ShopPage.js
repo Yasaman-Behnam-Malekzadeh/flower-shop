@@ -3,9 +3,11 @@ import ShopFilterBar from "../Components/Shop/ShopFilterBar";
 import BouquetCard from "../Components/Shop/BouquetCard";
 import FeaturesBar from "../Components/Hero/FeaturesBar";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export default function ShopPage() {
   const [products, setProducts] = useState([]);
+  const { t } = useTranslation();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     fetch("/api/products")
@@ -51,12 +53,12 @@ export default function ShopPage() {
           </svg>
         </div>
         <div className="text-xs text-stone-400 mb-4 font-medium">
-          Home / Bouquets
+          {t("shop.breadcrumb.home")} / {t("shop.breadcrumb.bouquets")}
         </div>
         <h1 className="font-heading text-4xl sm:text-5xl font-extrabold text-[#2B2B2B] tracking-tight leading-tight">
-          Little bouquets.
+          {t("shop.header.title")}
           <br />
-          <span className="text-[#6C5389]">Lasting joy.</span>
+          <span className="text-[#6C5389]">{t("shop.header.title_purple")}</span>
         </h1>
         <div
           className="absolute bottom-10 -right-6 sm:-right-10 z-30 animate-swing"
@@ -76,8 +78,7 @@ export default function ShopPage() {
           </svg>
         </div>
         <p className="text-stone-600 text-xs sm:text-sm mt-3 max-w-lg mx-auto leading-relaxed">
-          Thoughtfully arranged. Ready to fall in love with. Find your handmade
-          crochet bouquet — for yourself or someone special.
+          {t("shop.header.subtitle")}
         </p>
       </section>
 
@@ -93,11 +94,11 @@ export default function ShopPage() {
         <div className="flex items-center justify-between text-xs sm:text-sm text-stone-500 mb-8">
           <span>{/* {products.length} of {products.length} bouquets */}</span>
           <div className="flex items-center gap-2">
-            <span>Sort:</span>
+            <span>{t("shop.sort.label")}</span>
             <select className="bg-transparent font-semibold text-stone-800 focus:outline-none cursor-pointer">
-              <option>Our picks</option>
-              <option>Price: Low to High</option>
-              <option>Price: High to Low</option>
+              <option>{t("shop.sort.our_picks")}</option>
+              <option>{t("shop.sort.price_low_to_high")}</option>
+              <option>{t("shop.sort.price_high_to_low")}</option>
             </select>
           </div>
         </div>
@@ -113,15 +114,14 @@ export default function ShopPage() {
         <div className="mt-16 bg-[#EDE8EC] rounded-3xl p-8 sm:p-10 flex flex-col md:flex-row items-center justify-between gap-6">
           <div>
             <h2 className="text-2xl font-bold text-stone-900 tracking-tight">
-              Want something uniquely yours?
+              {t("shop.cta.title")}
             </h2>
             <p className="text-stone-600 text-xs sm:text-sm mt-1">
-              Choose your flowers, paper and ribbon. We'll make your
-              one-of-a-kind bouquet.
+              {t("shop.cta.text")}
             </p>
           </div>
           <Link to="/build" className="bg-[#6C5389] text-white text-xs sm:text-sm font-semibold px-6 py-3 rounded-xl hover:bg-[#584272] transition-colors whitespace-nowrap">
-            Design your bouquet
+            {t("shop.cta.design_button")}
           </Link>
         </div>
       </main>

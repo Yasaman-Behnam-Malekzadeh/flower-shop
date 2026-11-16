@@ -59,5 +59,42 @@
     "tagline": "Made with love. Stitch by stitch.",
     "contact": "Contact & questions",
     "legal": "Legal & privacy"
+  },
+  "shop": {
+    "breadcrumb": {
+      "home": "Home",
+      "bouquets": "Bouquets"
+    },
+    "header": {
+      "title": "Little bouquets.",
+      "title_purple": "Lasting joy.",
+      "subtitle": "Thoughtfully arranged. Ready to fall in love with. Find your handmade crochet bouquet — for yourself or someone special."
+    },
+    "filters": {
+      "search_label": "Find your bouquet",
+      "search_placeholder": "Pastel, lavender...",
+      "flower_type_label": "Flower type",
+      "all_flowers": "All flowers",
+      "occasion_label": "Occasion",
+      "every_occasion": "Every occasion",
+      "price_label": "Price",
+      "all_prices": "All prices",
+      "reset": "Reset"
+    },
+    "sort": {
+      "label": "Sort:",
+      "our_picks": "Our picks",
+      "price_low_to_high": "Price: Low to High",
+      "price_high_to_low": "Price: High to Low"
+    },
+    "card": {
+      "vat_note": "incl. VAT, plus shipping",
+      "add_to_bag": "Add to bag"
+    },
+    "cta_card":{
+      "title": "Want something uniquely yours?",
+      "text":"Choose your flowers, paper and ribbon. We'll make your one-of-a-kind bouquet.",
+      "design_button":"Design your own bouquet"
+    }
   }
 }

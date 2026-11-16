@@ -81,5 +81,42 @@
     "tagline": "Mit Liebe gemacht. Masche für Masche.",
     "contact": "Kontakt & Fragen",
     "legal": "Rechtliches & Datenschutz"
+  },
+  "shop": {
+    "breadcrumb": {
+      "home": "Startseite",
+      "bouquets": "Sträuße"
+    },
+    "header": {
+      "title": "Kleine Sträuße.",
+      "title_purple": "Bleibende Freude.",
+      "subtitle": "Liebevoll arrangiert. Bereit zum Verlieben. Finde deinen handgehäkelten Blumenstrauß – für dich selbst oder einen besonderen Menschen."
+    },
+    "filters": {
+      "search_label": "Finde deinen Strauß",
+      "search_placeholder": "Pastell, Lavendel...",
+      "flower_type_label": "Blumenart",
+      "all_flowers": "Alle Blumen",
+      "occasion_label": "Anlass",
+      "every_occasion": "Jeder Anlass",
+      "price_label": "Preis",
+      "all_prices": "Alle Preise",
+      "reset": "Zurücksetzen"
+    },
+    "sort": {
+      "label": "Sortieren:",
+      "our_picks": "Unsere Auswahl",
+      "price_low_to_high": "Preis: aufsteigend",
+      "price_high_to_low": "Preis: absteigend"
+    },
+    "card": {
+      "vat_note": "inkl. MwSt., zzgl. Versand",
+      "add_to_bag": "In den Warenkorb"
+    },
+    "cta_card":{
+      "title": "Deinen eigenen Strauß gestalten",
+      "desc": "Wähle deine Lieblingsblüten, füge eine persönliche Note hinzu und wir häkeln deinen Strauß mit Liebe.",
+      "cta": "Jetzt gestalten"
+    }
   }
 }

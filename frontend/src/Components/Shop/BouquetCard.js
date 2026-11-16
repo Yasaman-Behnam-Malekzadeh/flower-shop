@@ -1,8 +1,10 @@
 import React from "react";
 import { Heart, ShoppingBag } from "lucide-react";
 import defaultImage from "../../assets/default-image.jpeg";
+import { useTranslation } from "react-i18next";
 
 export default function BouquetCard({ item }) {
+  const { t } = useTranslation();
   const { name, description, price, bgCard, tag, image } = item;
 
   return (
@@ -31,11 +33,6 @@ export default function BouquetCard({ item }) {
           }}
           className="w h object-cover"
         />
-
-        {/* Quick View Button */}
-        <button className="absolute bottom-4 bg-white/90 backdrop-blur-sm text-stone-800 text-xs font-semibold px-4 py-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 shadow-sm">
-          Quick view
-        </button>
       </div>
 
       {/* Product Details */}
@@ -56,12 +53,12 @@ export default function BouquetCard({ item }) {
               €{price}
             </span>
             <span className="block text-[10px] text-stone-400">
-              incl. VAT, plus shipping
+              {t("shop.card.vat_note")}
             </span>
           </div>
 
           <button className="bg-[#6C5389] text-white text-xs font-semibold px-4 py-2.5 rounded-xl flex items-center gap-2 hover:bg-[#584272] transition-colors">
-            Add to bag
+            {t("shop.card.add_to_bag")}
             <ShoppingBag className="w-3.5 h-3.5" />
           </button>
         </div>
