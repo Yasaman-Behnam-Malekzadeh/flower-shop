@@ -9,10 +9,10 @@ export default function ShopFilterBar() {
         
         {/* Search Input */}
         <div className="flex-1 w-full md:w-auto">
-          <label className="block font-semibold mb-1.5 text-stone-800">{t("shop.filter.search_label")}</label>
+          <label className="block font-semibold mb-1.5 text-stone-800">{t("shop.filters.search_label")}</label>
           <input 
             type="text" 
-            placeholder={t("shop.filter.search_placeholder")} 
+            placeholder={t("shop.filters.search_placeholder")} 
             className="w-full bg-white border border-stone-300 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#6C5389]/30 transition-all text-stone-800 placeholder-stone-400"
           />
         </div>
