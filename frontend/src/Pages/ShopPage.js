@@ -114,14 +114,14 @@ export default function ShopPage() {
         <div className="mt-16 bg-[#EDE8EC] rounded-3xl p-8 sm:p-10 flex flex-col md:flex-row items-center justify-between gap-6">
           <div>
             <h2 className="text-2xl font-bold text-stone-900 tracking-tight">
-              {t("shop.cta.title")}
+              {t("shop.cta_card.title")}
             </h2>
             <p className="text-stone-600 text-xs sm:text-sm mt-1">
-              {t("shop.cta.text")}
+              {t("shop.cta_card.text")}
             </p>
           </div>
           <Link to="/build" className="bg-[#6C5389] text-white text-xs sm:text-sm font-semibold px-6 py-3 rounded-xl hover:bg-[#584272] transition-colors whitespace-nowrap">
-            {t("shop.cta.design_button")}
+            {t("shop.cta_card.design_button")}
           </Link>
         </div>
       </main>
