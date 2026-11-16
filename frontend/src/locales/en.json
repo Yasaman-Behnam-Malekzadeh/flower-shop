@@ -1,4 +1,8 @@
 {
+  "top_banner":{
+    "crafted":"Crocheted with love. Made to keep forever.",
+    "shipping":"Shipping within Germany and Europe"
+  },
   "nav": {
     "shop": "Shop bouquets",
     "build": "Build a Bouquet",
@@ -9,8 +13,51 @@
     "logout": "Logout"
   },
   "hero": {
-    "title": "Handmade Crochet Bouquets That Last Forever",
-    "subtitle": "Custom stem-by-stem arrangements crafted with love.",
-    "cta": "Start Designing"
+    "eyebrow": "LITTLE STITCHES. BIG FEELINGS.",
+    "title": "Flowers that <br /> stay forever.",
+    "subtitle": "A little yarn. A whole lot of love. Discover handmade crochet flowers that never wilt – as one of a kind as your favourite person.",
+    "cta": "Design your own bouquet",
+    "note": "Dreamed up by you. Handmade just for you.",
+    "badge_top": "Handmade with love",
+    "badge_bottom": "No water. Just love.",
+    "highlights": {
+      "unique": "Every bloom is unique",
+      "never_wilts": "Joy that never wilts",
+      "wrapped": "Wrapped with love"
+    }
+  },
+  "featured": {
+    "title": "Made to fall in love with.",
+    "subtitle": "Our favourite bouquets. Maybe yours, too?",
+    "explore_all": "Explore all bouquets",
+    "vat_note": "incl. VAT, plus shipping",
+    "add_to_bag": "Add to bag +"
+  },
+  "steps": {
+    "title": "Your bouquet. Your little story.",
+    "subtitle": "A gift that feels like you. In three simple steps.",
+    "cta": "Get creative",
+    "step_1": {
+      "title": "1. Pick your blooms",
+      "desc": "Roses, tulips, or a little of both? You choose."
+    },
+    "step_2": {
+      "title": "2. Make it yours",
+      "desc": "Add paper, a ribbon, and a few kind words."
+    },
+    "step_3": {
+      "title": "3. Unwrap some joy",
+      "desc": "We crochet and wrap your bouquet with love."
+    }
+  },
+  "cta_banner": {
+    "title": "For your favourite person. Or just for you.",
+    "subtitle": "For a birthday, a little thank-you, or no reason at all.",
+    "cta": "Give a little joy"
+  },
+  "footer": {
+    "tagline": "Made with love. Stitch by stitch.",
+    "contact": "Contact & questions",
+    "legal": "Legal & privacy"
   }
 }

@@ -1,19 +1,21 @@
 import React from 'react';
 import { Flower2, Heart, Package } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const FeaturesBar = () => {
+  const { t } = useTranslation();
   const features = [
     {
       icon: <Flower2 className="w-4 h-4 text-green-text" />,
-      text: "Every bloom is unique",
+      text: t("hero.highlights.unique"),
     },
     {
       icon: <Heart className="w-4 h-4 text-green-text" />,
-      text: "Joy that never wilts",
+      text: t("hero.highlights.never_wilts"),
     },
     {
       icon: <Package className="w-4 h-4 text-green-text" />,
-      text: "Wrapped with love",
+      text: t("hero.highlights.wrapped"),
     },
   ];
 

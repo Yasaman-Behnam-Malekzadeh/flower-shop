@@ -1,4 +1,8 @@
 {
+  "top_banner": {
+    "crafted": "Mit Liebe gehäkelt. Für die Ewigkeit gemacht.",
+    "shipping": "Versand innerhalb Deutschlands und Europas"
+  },
   "nav": {
     "shop": "Sträuße kaufen",
     "build": "Strauß gestalten",
@@ -9,8 +13,73 @@
     "logout": "Abmelden"
   },
   "hero": {
-    "title": "Handgehäkelte Blumensträuße für die Ewigkeit",
-    "subtitle": "Individuelle Arrangements, Stiel für Stiel mit Liebe gefertigt.",
-    "cta": "Jetzt gestalten"
+    "eyebrow": "KLEINE MASCHEN. GROSSE GEFÜHLE.",
+    "title": "Blumen, die <br /> für immer bleiben.",
+    "subtitle": "Ein wenig Garn. Ganz viel Liebe. Entdecke handgehäkelte Blumen, die niemals verwelken – so einzigartig wie dein Lieblingsmensch.",
+    "cta": "Deinen eigenen Strauß gestalten",
+    "note": "Von dir erträumt. Extra für dich handgefertigt.",
+    "badge_top": "Handgemacht mit Liebe",
+    "badge_bottom": "Kein Wasser. Nur Liebe.",
+    "highlights": {
+      "unique": "Jede Blüte ist ein Unikat",
+      "never_wilts": "Freude, die niemals verwelkt",
+      "wrapped": "Mit Liebe verpackt"
+    }
+  },
+  "featured": {
+    "title": "Zum Verlieben gemacht.",
+    "subtitle": "Unsere Lieblingssträuße. Vielleicht auch bald deine?",
+    "explore_all": "Alle Sträuße entdecken",
+    "vat_note": "inkl. MwSt., zzgl. Versand",
+    "add_to_bag": "In den Warenkorb +",
+    "items": {
+      "pastel_poetry": {
+        "badge": "Unser Favorit",
+        "name": "Pastellpoesie",
+        "desc": "Rosa, Creme & ein Hauch von Lavendel"
+      },
+      "meadow_joy": {
+        "badge": "Nur für dich",
+        "name": "Wiesenglück",
+        "desc": "Ein kleines Stück Wildblumenwiese"
+      },
+      "little_sunshine": {
+        "badge": "Ein kleines Glück",
+        "name": "Kleiner Sonnenschein",
+        "desc": "Warme Farben, glückliche Gefühle"
+      },
+      "lavender_love": {
+        "badge": "So viel Liebe",
+        "name": "Lavendelliebe",
+        "desc": "Sanfte Nuancen für besondere Menschen"
+      }
+    }
+  },
+  "steps": {
+    "title": "Dein Strauß. Deine kleine Geschichte.",
+    "subtitle": "Ein Geschenk, das ganz nach dir klingt. In drei einfachen Schritten.",
+    "cta": "Kreativ werden",
+    "step_1": {
+      "title": "1. Wähle deine Blüten",
+      "desc": "Rosen, Tulpen oder ein bisschen von beidem? Du entscheidest."
+    },
+    "step_2": {
+      "title": "2. Mach ihn zu deinem",
+      "desc": "Füge Papier, eine Schleife und ein paar liebe Worte hinzu."
+    },
+    "step_3": {
+      "title": "3. Freude auspacken",
+      "desc": "Wir häkeln und verpacken deinen Strauß mit viel Liebe."
+    }
+  },
+  "cta_banner": {
+    "title": "Für deinen Lieblingsmenschen. Oder einfach für dich.",
+    "subtitle": "Zum Geburtstag, als kleines Dankeschön oder ganz ohne Anlass.",
+    "cta": "Ein bisschen Freude schenken"
+  },
+  "footer": {
+    "tagline": "Mit Liebe gemacht. Masche für Masche.",
+    "contact": "Kontakt & Fragen",
+    "legal": "Rechtliches & Datenschutz"
   }
 }

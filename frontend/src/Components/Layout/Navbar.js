@@ -111,7 +111,7 @@ const Navbar = ({ selectedFlowers = {}, onUpdateCount }) => {
               to="/HowItWorks"
               className="hover:text-black transition-colors"
             >
-              {t("nav.how_it_works", "How it works")}
+              {t("nav.how-it-works", "How it works")}
             </Link>
           </div>
 

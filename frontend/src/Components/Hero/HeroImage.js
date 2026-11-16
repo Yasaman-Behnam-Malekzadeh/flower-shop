@@ -1,7 +1,10 @@
 import React from 'react';
 import heroImage from '../../assets/hero-image-7.png';
+import {useTranslation} from "react-i18next";
+
 
 const HeroImage = () => {
+  const { t } = useTranslation();
   return (
     <div className="relative flex items-center justify-center py-6 w-full">
       {/* Kanten / Blob Container */}
@@ -39,13 +42,13 @@ const HeroImage = () => {
       <div className="absolute top-2 right-4 sm:right-20 bg-white/95 backdrop-blur-sm border border-pink-100 rounded-full w-22 h-22 sm:w-24 sm:h-24 flex flex-col items-center justify-center text-center p-2 shadow-sm z-30 animate-swing">
         <span className="text-sm font-extrabold text-[#2B2B2B] leading-none">100%</span>
         <span className="text-[10px] text-gray-500 mt-0.5 leading-tight">
-          Handmade<br />with love
+          {t("hero.badge_top")}
         </span>
       </div>
 
      
       <div className="absolute bottom-6 left-2 sm:left-12 bg-white/95 backdrop-blur-sm px-4 py-2 rounded-xl shadow-sm border border-gray-100 text-xs text-gray-600 font-medium z-30 transform -rotate-6">
-        No water. Just love.
+        {t("hero.badge_bottom")}
       </div>
     </div>
   );
