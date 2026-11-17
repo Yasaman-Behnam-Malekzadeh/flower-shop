@@ -1,10 +1,12 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 export default function LivePreview() {
+  const { t } = useTranslation();
   return (
     <div className="bg-[#F8EFF4] rounded-2xl p-6 flex flex-col items-center justify-center relative min-h-[260px]">
       <span className="absolute top-4 left-4 bg-white/80 text-[10px] font-semibold text-stone-600 px-2.5 py-1 rounded-full shadow-sm">
-        Live preview
+        {t("build.live-preview")}
       </span>
       {/* Visual Illustration Holder */}
       <div className="w-48 h-48 relative flex items-center justify-center">

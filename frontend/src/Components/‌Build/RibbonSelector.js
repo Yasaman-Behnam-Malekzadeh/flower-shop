@@ -1,8 +1,10 @@
 import React from "react";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function RibbonSelector({ selectedRibbon, onSelectRibbon }) {
   const [ribbons, setRibbons] = useState([]);
+  const { t } = useTranslation();
 
   useEffect(() => {
     fetch("/api/ribbons")
@@ -21,7 +23,7 @@ export default function RibbonSelector({ selectedRibbon, onSelectRibbon }) {
   return (
     <div>
       <label className="block text-xs font-semibold text-stone-700 mb-3">
-        Select ribbon
+        {t("build.ribbon-selector")}
       </label>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {ribbons.map((ribbon) => {

@@ -1,8 +1,11 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 export default function CartDrawer({ isOpen, onClose, cartItems, onUpdateCount }) {
   if (!isOpen) return null;
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const { t } = useTranslation();
   const totalItems = Object.values(cartItems).reduce((a, b) => a + b, 0);
 
   return (
@@ -20,7 +23,7 @@ export default function CartDrawer({ isOpen, onClose, cartItems, onUpdateCount }
           {/* Header */}
           <div className="flex items-center justify-between px-6 py-5 border-b border-stone-100">
             <h2 className="text-lg font-bold text-stone-900 font-heading">
-              Your Bouquet Items ({totalItems})
+              {t("build.cart-drawer.header")} ({totalItems})
             </h2>
             <button
               onClick={onClose}
@@ -34,7 +37,7 @@ export default function CartDrawer({ isOpen, onClose, cartItems, onUpdateCount }
           <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
             {Object.keys(cartItems).length === 0 || totalItems === 0 ? (
               <div className="text-center py-20 text-stone-400 text-sm">
-                Your cart is currently empty. Pick some blooms!
+                {t("build.cart-drawer.empty-text")}
               </div>
             ) : (
               Object.entries(cartItems).map(([id, count]) => {
@@ -53,7 +56,7 @@ export default function CartDrawer({ isOpen, onClose, cartItems, onUpdateCount }
                       onClick={() => onUpdateCount(id, -count)}
                       className="text-xs text-red-500 hover:underline px-2 py-1"
                     >
-                      Remove
+                      {t("build.cart-drawer.remove")}
                     </button>
                   </div>
                 );
@@ -67,7 +70,7 @@ export default function CartDrawer({ isOpen, onClose, cartItems, onUpdateCount }
               onClick={onClose}
               className="w-full py-3.5 bg-[#584172] text-white rounded-2xl font-medium hover:bg-[#48345e] transition-colors shadow-sm text-sm"
             >
-              Proceed to Checkout
+              {t("build.cart-drawer.checkout")}
             </button>
           </div>
 

@@ -4,8 +4,12 @@ import PriceBreakdown from "../Components/\u200cBuild/PriceBreakdown";
 import PaperSelector from "../Components/\u200cBuild/PaperSelector";
 import PersonalTouch from "../Components/\u200cBuild/PersonalTouch";
 import AiFloristAdvisor from "../Components/BuildAi/AiFloristAdvisor";
+import { useTranslation } from "react-i18next";
 
 export default function BuildPage() {
+
+  const { t } = useTranslation();
+
   const [activeTab, setActiveTab] = useState("manual"); // "manual" | "ai"
 
   const [selectedFlowers, setSelectedFlowers] = useState({});
@@ -99,11 +103,10 @@ export default function BuildPage() {
         <header className="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <h1 className="font-heading text-3xl sm:text-4xl font-extrabold text-stone-900 tracking-tight">
-              Your dream bouquet
+              {t("build.title")}
             </h1>
             <p className="text-stone-500 text-xs sm:text-sm mt-1">
-              Pick your blooms or let our AI Florist curate a custom mix for
-              you.
+              {t("build.subtitle")}
             </p>
           </div>
 
@@ -117,7 +120,7 @@ export default function BuildPage() {
                   : "text-stone-500 hover:text-stone-900"
               }`}
             >
-              Manual Builder
+              {t("build.switch-tab.manual")}
             </button>
             <button
               onClick={() => setActiveTab("ai")}
@@ -127,7 +130,7 @@ export default function BuildPage() {
                   : "text-stone-500 hover:text-stone-900"
               }`}
             >
-              <span>✨</span> Build with AI
+              <span>✨</span> {t("build.switch-tab.ai")}
             </button>
           </div>
         </header>

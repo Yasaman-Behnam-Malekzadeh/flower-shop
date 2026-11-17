@@ -2,6 +2,7 @@ import React from "react";
 import RibbonSelector from "./RibbonSelector";
 import GreetingCard from "./GreetingCard";
 import GiftWrap from "./GiftWrap";
+import { useTranslation } from "react-i18next";
 
 export default function PersonalTouch({
   selectedRibbon,
@@ -11,10 +12,11 @@ export default function PersonalTouch({
   giftWrapDetails,
   onUpdateGiftWrapDetails,
 }) {
+  const { t } = useTranslation();
   return (
     <div className="bg-white/80 rounded-2xl p-6 shadow-sm border border-stone-100 space-y-6">
       <h3 className="font-heading text-lg font-bold text-stone-800">
-        4. Personal touch
+        {t("build.personal-touch")}
       </h3>
 
       {/* Ribbon Selector */}

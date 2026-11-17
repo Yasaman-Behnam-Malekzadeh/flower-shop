@@ -1,7 +1,7 @@
 {
-  "top_banner":{
-    "crafted":"Crocheted with love. Made to keep forever.",
-    "shipping":"Shipping within Germany and Europe"
+  "top_banner": {
+    "crafted": "Crocheted with love. Made to keep forever.",
+    "shipping": "Shipping within Germany and Europe"
   },
   "nav": {
     "shop": "Shop bouquets",
@@ -99,10 +99,46 @@
       "vat_note": "incl. VAT, plus shipping",
       "add_to_bag": "Add to bag"
     },
-    "cta_card":{
+    "cta_card": {
       "title": "Want something uniquely yours?",
-      "text":"Choose your flowers, paper and ribbon. We'll make your one-of-a-kind bouquet.",
-      "design_button":"Design your own bouquet"
+      "text": "Choose your flowers, paper and ribbon. We'll make your one-of-a-kind bouquet.",
+      "design_button": "Design your own bouquet"
     }
+  },
+  "build": {
+    "title": "Your dream bouquet",
+    "subtitle": "Pick your blooms or let our AI Florist curate a custom mix for you.",
+    "switch-tab": {
+      "manual": "Manual Builder",
+      "ai": "Build with AI"
+    },
+    "cart-drawer": {
+      "header": "Your Bouquet Items ",
+      "empty-text": "Your cart is currently empty. Pick some blooms!",
+      "remove": "Remove",
+      "total": "Total",
+      "checkout": "Proceed to Checkout"
+    },
+    "flower-selector":{
+      "loading": "Loading flowers...",
+      "error":". Please try again later.",
+      "pick_flowers": "1. Pick blooms"
+    },
+    "gift-wrap": "Gift wrap",
+    "greeting-card": "Include greeting card (handwritten)",
+    "live-preview": "Live preview",
+    "paper-selector": "2. Paper",
+    "personal-touch": "4. Personal touch",
+    "price-breakdown": {
+      "title": "Price breakdown",
+      "no-choosen": "No blooms or add-ons selected yet.",
+      "greeting-card": "Greeting card (handwritten)",
+      "gift-wrap": "Gift wrap",
+      "total": "Total",
+      "vat-note": "incl. VAT",
+      "add-to-cart": "Add to cart",
+      "ribbon": "ribbon"
+    },
+    "ribbon-selector": " Select ribbon"
   }
 }

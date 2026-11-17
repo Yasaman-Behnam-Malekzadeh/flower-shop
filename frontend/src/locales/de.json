@@ -126,5 +126,42 @@
       "desc": "Wähle deine Lieblingsblüten, füge eine persönliche Note hinzu und wir häkeln deinen Strauß mit Liebe.",
       "cta": "Jetzt gestalten"
     }
+  },
+  "build":{
+    "title": "Gestalte deinen eigenen Strauß",
+    "subtitle": "Wähle deine Lieblingsblüten, füge eine persönliche Note hinzu",
+    "switch-tab": {
+      "manual": "Manueller Builder",
+      "ai": "Mit KI gestalten"
+    },
+    "cart-drawer": {
+      "header": "Deine Strauß-Artikel",
+      "empty-text": "Dein Warenkorb ist derzeit leer. Wähle ein paar Blüten aus!",
+      "remove": "Entfernen",
+      "total": "Gesamt",
+      "checkout": "Zur Kasse"
+    },
+    "flower-selector": {
+      "loading": "Blumen werden geladen...",
+      "error": "Fehler beim Laden der Blumen. Bitte versuche es später erneut.",
+      "pick_flowers": "1. Wähle deine Blüten"
+    },
+    "gift-wrap": "Geschenkverpackung",
+    "greeting-card": "Grußkarte (handschriftlich) hinzufügen",
+    "live-preview": "Live-Vorschau",
+    "paper-selector": "2. Papier",
+    "personal-touch": "4. Persönliche Note",
+    "price-breakdown": {
+      "title": "Preisübersicht",
+      "no-choosen": "Noch keine Blüten oder Extras ausgewählt.",
+      "greeting-card": "Grußkarte (handschriftlich)",
+      "gift-wrap": "Geschenkverpackung",
+      "ribbon": "Schleife",
+      "total": "Gesamt",
+      "vat-note": "inkl. MwSt.",
+      "add-to-cart": "In den Warenkorb"
+    },
+    "ribbon-selector": "3. Schleife auswählen"
+    
   }
 }

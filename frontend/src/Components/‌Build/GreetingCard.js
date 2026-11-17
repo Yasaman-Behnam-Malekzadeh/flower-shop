@@ -1,12 +1,14 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 export default function GreetingCard({ details, onChangeDetails }) {
+  const { t } = useTranslation();
   return (
     <div>
       {/* Toggle Header */}
       <div className="flex items-center justify-between mb-2">
         <label className="text-xs font-semibold text-stone-700">
-          Include greeting card (handwritten) (+€3.50)
+          {t("build.greeting-card")} (+€3.50)
         </label>
         
         {/* Toggle Switch */}

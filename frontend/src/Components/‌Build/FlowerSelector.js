@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function FlowerSelector({ selectedFlowers, onUpdateCount }) {
   const [flowers, setFlowers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const { t } = useTranslation();
 
   useEffect(() => {
     fetch("/api/flowers")
@@ -15,7 +17,9 @@ export default function FlowerSelector({ selectedFlowers, onUpdateCount }) {
       })
       .then((data) => {
         if (!Array.isArray(data)) {
-          throw new Error(data.error || "The flowers API returned invalid data");
+          throw new Error(
+            data.error || "The flowers API returned invalid data",
+          );
         }
         const mappedFlowers = data.map((item) => ({
           id: item.id.toString(),
@@ -37,7 +41,7 @@ export default function FlowerSelector({ selectedFlowers, onUpdateCount }) {
   if (loading) {
     return (
       <div className="bg-white/80 rounded-2xl p-6 shadow-sm border border-stone-100 text-center text-stone-500">
-        Loading flowers...
+        {t("build.flower-selector.loading")}
       </div>
     );
   }
@@ -45,7 +49,7 @@ export default function FlowerSelector({ selectedFlowers, onUpdateCount }) {
   if (error) {
     return (
       <div className="bg-white/80 rounded-2xl p-6 shadow-sm border border-stone-100 text-center text-red-600">
-        {error}. Please try again later.
+        {t("build.flower-selector.error")}
       </div>
     );
   }
@@ -53,7 +57,7 @@ export default function FlowerSelector({ selectedFlowers, onUpdateCount }) {
   return (
     <div className="bg-white/80 rounded-2xl p-6 shadow-sm border border-stone-100">
       <h3 className="font-heading text-lg font-bold text-stone-800 mb-4">
-        1. Pick blooms
+        {t("build.flower-selector.pick_flowers")}
       </h3>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {flowers.map((flower) => {
@@ -76,8 +80,12 @@ export default function FlowerSelector({ selectedFlowers, onUpdateCount }) {
                   </span>
                 )}
                 <div>
-                  <div className="font-semibold text-stone-800 text-sm">{flower.name}</div>
-                  <div className="text-xs text-stone-400">€{Number(flower.price).toFixed(2)}</div>
+                  <div className="font-semibold text-stone-800 text-sm">
+                    {flower.name}
+                  </div>
+                  <div className="text-xs text-stone-400">
+                    €{Number(flower.price).toFixed(2)}
+                  </div>
                 </div>
               </div>
 
@@ -89,7 +97,9 @@ export default function FlowerSelector({ selectedFlowers, onUpdateCount }) {
                 >
                   -
                 </button>
-                <span className="w-5 text-center text-xs font-bold text-stone-800">{count}</span>
+                <span className="w-5 text-center text-xs font-bold text-stone-800">
+                  {count}
+                </span>
                 <button
                   onClick={() => onUpdateCount(flower.id, 1)}
                   className="w-6 h-6 flex items-center justify-center bg-[#584172] text-white rounded-md hover:bg-[#46335c] transition-colors font-bold text-sm"

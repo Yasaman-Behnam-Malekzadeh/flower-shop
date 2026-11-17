@@ -1,14 +1,12 @@
-
-
-
-
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 export default function GiftWrap({ details, onChangeDetails }) {
+  const { t } = useTranslation();
   return (
     <div className="flex items-center justify-between pt-2">
       <span className="text-xs font-semibold text-stone-700">
-        Gift wrap (+€4.90)
+        {t("build.gift-wrap")} (+€4.90)
       </span>
       <button
         type="button"

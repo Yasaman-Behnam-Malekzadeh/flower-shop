@@ -1,7 +1,9 @@
 import React from "react";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function PaperSelector({ selectedPaper, onSelectPaper }) {
+  const { t } = useTranslation();
   const [papers, setPapers] = useState([]);
 
   useEffect(() => {
@@ -21,7 +23,7 @@ export default function PaperSelector({ selectedPaper, onSelectPaper }) {
   return (
     <div className="bg-white/80 rounded-2xl p-6 shadow-sm border border-stone-100">
       <h3 className="font-heading text-lg font-bold text-stone-800 mb-4">
-        2. Paper
+        {t("build.paper-selector")}
       </h3>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {papers.map((paper) => {

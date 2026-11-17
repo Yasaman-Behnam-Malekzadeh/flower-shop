@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
+
 
 export default function PriceBreakdown({
   selectedFlowers = {},
@@ -10,6 +12,7 @@ export default function PriceBreakdown({
   const [flowers, setFlowers] = useState([]);
   const [papers, setPapers] = useState([]);
   const [ribbons, setRibbons] = useState([]);
+  const { t } = useTranslation();
 
   // Fetch flowers, papers, and ribbons dynamically from the backend API
   useEffect(() => {
@@ -95,12 +98,12 @@ export default function PriceBreakdown({
   return (
     <div className="p-6 space-y-4 bg-white/80 rounded-2xl shadow-sm border border-stone-100">
       <h4 className="font-heading text-sm font-bold text-stone-800">
-        Price breakdown
+        {t("build.price-breakdown.title")}
       </h4>
 
       <div className="space-y-2.5 text-xs text-stone-600 border-b border-stone-100 pb-4">
         {!hasItems ? (
-          <div className="text-stone-400 italic">No blooms or add-ons selected yet.</div>
+          <div className="text-stone-400 italic">{t("build.price-breakdown.no-choosen")}</div>
         ) : (
           <>
             {/* Flowers List */}
@@ -128,7 +131,7 @@ export default function PriceBreakdown({
             {/* Selected Ribbon Line Item */}
             {currentRibbon.id !== "none" && (
               <div className="flex justify-between text-stone-700">
-                <span>{currentRibbon.name} ribbon</span>
+                <span>{currentRibbon.name} {t("build.price-breakdown.ribbon")}</span>
                 <span className="font-medium text-stone-800">
                   €{currentRibbon.price.toFixed(2)}
                 </span>
@@ -138,7 +141,7 @@ export default function PriceBreakdown({
             {/* Handwritten Card Line Item */}
             {cardDetails?.includeCard && (
               <div className="flex justify-between text-stone-700">
-                <span>Greeting card (handwritten)</span>
+                <span>{t("build.price-breakdown.greeting-card")}</span>
                 <span className="font-medium text-stone-800">€3.50</span>
               </div>
             )}
@@ -146,7 +149,7 @@ export default function PriceBreakdown({
             {/* Gift Wrap Line Item */}
             {giftWrapDetails?.isGiftWrapped && (
               <div className="flex justify-between text-stone-700">
-                <span>Gift wrap</span>
+                <span>{t("build.price-breakdown.gift-wrap")}</span>
                 <span className="font-medium text-stone-800">€4.90</span>
               </div>
             )}
@@ -156,8 +159,8 @@ export default function PriceBreakdown({
 
       <div className="flex items-center justify-between pt-1">
         <div>
-          <div className="text-xs font-semibold text-stone-800">Total</div>
-          <div className="text-[10px] text-stone-400">incl. VAT</div>
+          <div className="text-xs font-semibold text-stone-800">{t("build.price-breakdown.total")}</div>
+          <div className="text-[10px] text-stone-400">{t("build.price-breakdown.vat-note")}</div>
         </div>
         <div className="text-2xl font-black text-stone-900 font-heading">
           €{totalPrice.toFixed(2)}
@@ -165,7 +168,7 @@ export default function PriceBreakdown({
       </div>
 
       <button className="w-full bg-[#584172] text-white text-xs font-bold py-3.5 rounded-xl hover:bg-[#46335c] transition-colors shadow-sm flex items-center justify-center gap-2 mt-2">
-        <span>🛒</span> Add to cart
+        <span>🛒</span> {t("build.price-breakdown.add-to-cart")}
       </button>
     </div>
   );
