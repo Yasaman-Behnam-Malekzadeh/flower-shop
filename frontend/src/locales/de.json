@@ -55,7 +55,7 @@
       }
     }
   },
-  "steps": {
+  "how-it-works-banner": {
     "title": "Dein Strauß. Deine kleine Geschichte.",
     "subtitle": "Ein Geschenk, das ganz nach dir klingt. In drei einfachen Schritten.",
     "cta": "Kreativ werden",
@@ -121,13 +121,13 @@
       "vat_note": "inkl. MwSt., zzgl. Versand",
       "add_to_bag": "In den Warenkorb"
     },
-    "cta_card":{
+    "cta_card": {
       "title": "Deinen eigenen Strauß gestalten",
-      "desc": "Wähle deine Lieblingsblüten, füge eine persönliche Note hinzu und wir häkeln deinen Strauß mit Liebe.",
-      "cta": "Jetzt gestalten"
+      "text": "Wähle deine Lieblingsblüten, füge eine persönliche Note hinzu und wir häkeln deinen Strauß mit Liebe.",
+      "design_button": "Jetzt gestalten"
     }
   },
-  "build":{
+  "build": {
     "title": "Gestalte deinen eigenen Strauß",
     "subtitle": "Wähle deine Lieblingsblüten, füge eine persönliche Note hinzu",
     "switch-tab": {
@@ -162,6 +162,5 @@
       "add-to-cart": "In den Warenkorb"
     },
     "ribbon-selector": "3. Schleife auswählen"
-    
   }
 }

@@ -33,8 +33,8 @@
     "vat_note": "incl. VAT, plus shipping",
     "add_to_bag": "Add to bag +"
   },
-  "steps": {
-    "title": "Your bouquet. Your little story.",
+  "how-it-works-banner": {
+    "title": "Your bouquet.<br /> Your little story.",
     "subtitle": "A gift that feels like you. In three simple steps.",
     "cta": "Get creative",
     "step_1": {
@@ -119,9 +119,9 @@
       "total": "Total",
       "checkout": "Proceed to Checkout"
     },
-    "flower-selector":{
+    "flower-selector": {
       "loading": "Loading flowers...",
-      "error":". Please try again later.",
+      "error": ". Please try again later.",
       "pick_flowers": "1. Pick blooms"
     },
     "gift-wrap": "Gift wrap",

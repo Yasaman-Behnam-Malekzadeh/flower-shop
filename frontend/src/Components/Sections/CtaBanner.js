@@ -1,6 +1,7 @@
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 
 const CtaBanner = () => {
   const { t } = useTranslation();
@@ -16,10 +17,10 @@ const CtaBanner = () => {
           </p>
         </div>
 
-        <button className="bg-[#6C5389] hover:bg-[#584172] text-white text-xs font-semibold px-6 py-3.5 rounded-2xl shadow-sm transition-all flex items-center gap-2 shrink-0 active:scale-95">
+        <Link to="/shop" className="bg-[#6C5389] hover:bg-[#584172] text-white text-xs font-semibold px-6 py-3.5 rounded-2xl shadow-sm transition-all flex items-center gap-2 shrink-0 active:scale-95">
           {t("cta_banner.cta")}
           <ArrowRight className="w-4 h-4 stroke-[2]" />
-        </button>
+        </Link>
       </div>
     </div>
   );

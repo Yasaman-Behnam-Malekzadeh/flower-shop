@@ -4,7 +4,7 @@ import HeroImage from "../Components/Hero/HeroImage";
 import FeaturesBar from "../Components/Hero/FeaturesBar";
 import FeaturedBouquets from "../Components/Collection/FeaturedBouquets";
 import CtaBanner from "../Components/Sections/CtaBanner";
-import HowItWorks from "../Components/Sections/HowItWorks";
+import HowItWorksBanner from "../Components/Sections/HowItWorksBanner";
 
 export default function LandingPage() {
   return (
@@ -24,7 +24,7 @@ export default function LandingPage() {
       {/* 2. Main Sections */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-12 space-y-6">
         <FeaturedBouquets />
-        <HowItWorks />
+        <HowItWorksBanner />
         <CtaBanner />
       </div>
     </>
