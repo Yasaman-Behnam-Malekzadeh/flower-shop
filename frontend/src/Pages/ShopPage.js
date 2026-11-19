@@ -8,6 +8,8 @@ import { useTranslation } from "react-i18next";
 export default function ShopPage() {
   const [products, setProducts] = useState([]);
   const { t } = useTranslation();
+  const [searchTerm, setSearchTerm] = useState("");
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     fetch("/api/products")
@@ -33,6 +35,8 @@ export default function ShopPage() {
       })
       .catch((error) => console.error("Error fetching products:", error));
   }, []);
+
+  const filteredProducts = products.filter ((product) => (product.name || "").toLowerCase().includes(searchTerm.toLowerCase()))
 
   return (
     <div className="w-full bg-[#FAF8F5] min-h-screen flex flex-col font-sans text-stone-800">
@@ -86,13 +90,12 @@ export default function ShopPage() {
       <FeaturesBar />
 
       {/* 3. Filter Bar */}
-      <ShopFilterBar />
+      <ShopFilterBar searchTerm={searchTerm} onSearchChange={setSearchTerm}/>
 
       {/* 4. Products Grid */}
       <main className="max-w-7xl mx-auto px-6 sm:px-12 py-10 w-full flex-1">
         {/* Meta Bar */}
         <div className="flex items-center justify-between text-xs sm:text-sm text-stone-500 mb-8">
-          <span>{/* {products.length} of {products.length} bouquets */}</span>
           <div className="flex items-center gap-2">
             <span>{t("shop.sort.label")}</span>
             <select className="bg-transparent font-semibold text-stone-800 focus:outline-none cursor-pointer">
@@ -105,7 +108,7 @@ export default function ShopPage() {
 
         {/* Products Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {products.map((product) => (
+          {filteredProducts.map((product) => (
             <BouquetCard key={product.id} item={product} />
           ))}
         </div>
