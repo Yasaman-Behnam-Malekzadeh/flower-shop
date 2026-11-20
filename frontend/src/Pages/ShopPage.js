@@ -178,11 +178,29 @@ export default function ShopPage() {
         </div>
 
         {/* Products Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredProducts.map((product) => (
-            <BouquetCard key={product.id} item={product} />
-          ))}
-        </div>
+        {filteredProducts.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {filteredProducts.map((product) => (
+              <BouquetCard key={product.id} item={product} />
+            ))}
+          </div>
+        ) : (
+          <div className="bg-white/70 border border-stone-200/80 rounded-3xl py-16 px-6 text-center max-w-lg mx-auto my-6">
+            <h3 className="font-heading text-xl font-bold text-[#2B2B2B]">
+              {t("shop.empty.title")}
+            </h3>
+            <p className="text-stone-500 text-xs sm:text-sm mt-2 leading-relaxed">
+              {t("shop.empty.subtitle")}
+            </p>
+            <button
+              type="button"
+              onClick={handleResetFilters}
+              className="mt-6 bg-[#6C5389] hover:bg-[#584172] text-white text-xs sm:text-sm font-semibold px-6 py-2.5 rounded-xl transition-colors"
+            >
+              {t("shop.empty.reset_button")}
+            </button>
+          </div>
+        )}
 
         {/* Bottom CTA Card */}
         <div className="mt-16 bg-[#EDE8EC] rounded-3xl p-8 sm:p-10 flex flex-col md:flex-row items-center justify-between gap-6">

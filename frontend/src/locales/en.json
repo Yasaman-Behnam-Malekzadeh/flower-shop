@@ -103,6 +103,11 @@
       "title": "Want something uniquely yours?",
       "text": "Choose your flowers, paper and ribbon. We'll make your one-of-a-kind bouquet.",
       "design_button": "Design your own bouquet"
+    },
+    "empty": {
+      "title": "No bouquets match your filters",
+      "subtitle": "Try adjusting your search or clearing the active filters to see all handmade bouquets.",
+      "reset_button": "Reset filters"
     }
   },
   "build": {

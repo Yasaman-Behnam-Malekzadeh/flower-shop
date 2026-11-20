@@ -125,6 +125,11 @@
       "title": "Deinen eigenen Strauß gestalten",
       "text": "Wähle deine Lieblingsblüten, füge eine persönliche Note hinzu und wir häkeln deinen Strauß mit Liebe.",
       "design_button": "Jetzt gestalten"
+    },
+    "empty": {
+      "title": "Keine Sträuße für diese Filter gefunden",
+      "subtitle": "Passe deine Suche an oder setze die aktiven Filter zurück, um alle handgehäkelten Sträuße zu sehen.",
+      "reset_button": "Filter zurücksetzen"
     }
   },
   "build": {
