@@ -5,12 +5,52 @@ import FeaturesBar from "../Components/Hero/FeaturesBar";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
+const INITIAL_FILTERS = {
+  search: "",
+  flowerType: "all",
+  occasion: "all",
+  price: "all",
+};
+
+const matchesSearch = (product, search) => {
+  if (!search.trim()) return true;
+  const query = search.toLowerCase();
+  return (
+    (product.name || "").toLowerCase().includes(query) ||
+    (product.description || "").toLowerCase().includes(query)
+  );
+};
+
+const matchesFlowerType = (product, flowerType) => {
+  if (flowerType === "all") return true;
+  const haystack = `${product.flower_type || ""} ${product.name || ""} ${
+    product.description || ""
+  }`.toLowerCase();
+  return haystack.includes(flowerType.toLowerCase());
+};
+
+const matchesOccasion = (product, occasion) => {
+  if (occasion === "all") return true;
+  const haystack = `${product.occasion || ""} ${
+    product.description || ""
+  }`.toLowerCase();
+  return haystack.includes(occasion.toLowerCase());
+};
+
+const matchesPrice = (product, priceRange) => {
+  const price = Number(product.price);
+  if (priceRange === "under_5") return price < 5;
+  if (priceRange === "5_to_10") return price >= 5 && price <= 10;
+  if (priceRange === "over_10") return price > 10;
+  return true;
+};
+
 export default function ShopPage() {
   const [products, setProducts] = useState([]);
+  const [filters, setFilters] = useState(INITIAL_FILTERS);
+  const [sortBy, setSortBy] = useState("default");
   const { t } = useTranslation();
-  const [searchTerm, setSearchTerm] = useState("");
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     fetch("/api/products")
       .then((response) => {
@@ -26,22 +66,43 @@ export default function ShopPage() {
           title: item.name,
           price: item.price,
           description: item.description || "",
+          flower_type: item.flower_type || "",
+          occasion: item.occasion || "",
           image: item.image_url,
           image_url: item.image_url,
         }));
 
         setProducts(mappedProducts);
-        console.log("Fetched products successfully:", mappedProducts);
       })
       .catch((error) => console.error("Error fetching products:", error));
   }, []);
 
-  const filteredProducts = products.filter ((product) => (product.name || "").toLowerCase().includes(searchTerm.toLowerCase()))
+  const handleFilterChange = (key, value) => {
+    setFilters((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const handleResetFilters = () => {
+    setFilters(INITIAL_FILTERS);
+  };
+
+  const filteredProducts = products
+    .filter(
+      (product) =>
+        matchesSearch(product, filters.search) &&
+        matchesFlowerType(product, filters.flowerType) &&
+        matchesOccasion(product, filters.occasion) &&
+        matchesPrice(product, filters.price)
+    )
+    .sort((a, b) => {
+      if (sortBy === "price_asc") return Number(a.price) - Number(b.price);
+      if (sortBy === "price_desc") return Number(b.price) - Number(a.price);
+      return 0;
+    });
 
   return (
     <div className="w-full bg-[#FAF8F5] min-h-screen flex flex-col font-sans text-stone-800">
       {/* 1. Header Banner Area */}
-      <section className=" relative pt-8 pb-6 px-6 sm:px-12 text-center max-w-4xl mx-auto">
+      <section className="relative pt-8 pb-6 px-6 sm:px-12 text-center max-w-4xl mx-auto">
         <div className="absolute top-10 -left-8 sm:-left-12 z-30 animate-swing">
           <svg
             className="w-12 h-12 sm:w-16 sm:h-16 text-amber-400 fill-current drop-shadow-md"
@@ -62,7 +123,9 @@ export default function ShopPage() {
         <h1 className="font-heading text-4xl sm:text-5xl font-extrabold text-[#2B2B2B] tracking-tight leading-tight">
           {t("shop.header.title")}
           <br />
-          <span className="text-[#6C5389]">{t("shop.header.title_purple")}</span>
+          <span className="text-[#6C5389]">
+            {t("shop.header.title_purple")}
+          </span>
         </h1>
         <div
           className="absolute bottom-10 -right-6 sm:-right-10 z-30 animate-swing"
@@ -90,7 +153,11 @@ export default function ShopPage() {
       <FeaturesBar />
 
       {/* 3. Filter Bar */}
-      <ShopFilterBar searchTerm={searchTerm} onSearchChange={setSearchTerm}/>
+      <ShopFilterBar
+        filters={filters}
+        onFilterChange={handleFilterChange}
+        onReset={handleResetFilters}
+      />
 
       {/* 4. Products Grid */}
       <main className="max-w-7xl mx-auto px-6 sm:px-12 py-10 w-full flex-1">
@@ -98,10 +165,14 @@ export default function ShopPage() {
         <div className="flex items-center justify-between text-xs sm:text-sm text-stone-500 mb-8">
           <div className="flex items-center gap-2">
             <span>{t("shop.sort.label")}</span>
-            <select className="bg-transparent font-semibold text-stone-800 focus:outline-none cursor-pointer">
-              <option>{t("shop.sort.our_picks")}</option>
-              <option>{t("shop.sort.price_low_to_high")}</option>
-              <option>{t("shop.sort.price_high_to_low")}</option>
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className="bg-transparent font-semibold text-stone-800 focus:outline-none cursor-pointer"
+            >
+              <option value="default">{t("shop.sort.our_picks")}</option>
+              <option value="price_asc">{t("shop.sort.price_low_to_high")}</option>
+              <option value="price_desc">{t("shop.sort.price_high_to_low")}</option>
             </select>
           </div>
         </div>
@@ -123,7 +194,10 @@ export default function ShopPage() {
               {t("shop.cta_card.text")}
             </p>
           </div>
-          <Link to="/build" className="bg-[#6C5389] text-white text-xs sm:text-sm font-semibold px-6 py-3 rounded-xl hover:bg-[#584272] transition-colors whitespace-nowrap">
+          <Link
+            to="/build"
+            className="bg-[#6C5389] text-white text-xs sm:text-sm font-semibold px-6 py-3 rounded-xl hover:bg-[#584272] transition-colors whitespace-nowrap"
+          >
             {t("shop.cta_card.design_button")}
           </Link>
         </div>

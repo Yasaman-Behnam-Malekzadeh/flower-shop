@@ -1,8 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { X } from "lucide-react";
 
-export default function ShopFilterBar({ searchTerm = "", onSearchChange }) {
+export default function ShopFilterBar({ filters, onFilterChange, onReset }) {
   const { t } = useTranslation();
 
   return (
@@ -13,25 +12,13 @@ export default function ShopFilterBar({ searchTerm = "", onSearchChange }) {
           <label className="block font-semibold mb-1.5 text-stone-800">
             {t("shop.filters.search_label")}
           </label>
-          <div className="relative">
-            <input
-            value={searchTerm}
-            onChange={(e) => onSearchChange(e.target.value)}
+          <input
+            value={filters.search}
+            onChange={(e) => onFilterChange("search", e.target.value)}
             type="text"
             placeholder={t("shop.filters.search_placeholder")}
             className="w-full bg-white border border-stone-300 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#6C5389]/30 transition-all text-stone-800 placeholder-stone-400"
           />
-          {searchTerm && (
-            <button
-              type="button"
-              onClick={() => onSearchChange("")}
-              aria-label="Clear search"
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-700"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          )}
-          </div>
         </div>
 
         {/* Dropdowns Group */}
@@ -41,11 +28,15 @@ export default function ShopFilterBar({ searchTerm = "", onSearchChange }) {
             <label className="block font-semibold mb-1.5 text-stone-800">
               {t("shop.filters.flower_type_label")}
             </label>
-            <select className="w-full bg-white border border-stone-300 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#6C5389]/30">
-              <option>{t("shop.filters.all_flowers")}</option>
-              <option>{t("shop.filters.roses")}</option>
-              <option>{t("shop.filters.tulips")}</option>
-              <option>{t("shop.filters.daisies")}</option>
+            <select
+              value={filters.flowerType}
+              onChange={(e) => onFilterChange("flowerType", e.target.value)}
+              className="w-full bg-white border border-stone-300 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#6C5389]/30"
+            >
+              <option value="all">{t("shop.filters.all_flowers")}</option>
+              <option value="rose">{t("shop.filters.roses")}</option>
+              <option value="tulip">{t("shop.filters.tulips")}</option>
+              <option value="daisy">{t("shop.filters.daisies")}</option>
             </select>
           </div>
 
@@ -54,11 +45,15 @@ export default function ShopFilterBar({ searchTerm = "", onSearchChange }) {
             <label className="block font-semibold mb-1.5 text-stone-800">
               {t("shop.filters.occasion_label")}
             </label>
-            <select className="w-full bg-white border border-stone-300 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#6C5389]/30">
-              <option>{t("shop.filters.every_occasion")}</option>
-              <option>{t("shop.filters.birthday")}</option>
-              <option>{t("shop.filters.anniversary")}</option>
-              <option>{t("shop.filters.thank_you")}</option>
+            <select
+              value={filters.occasion}
+              onChange={(e) => onFilterChange("occasion", e.target.value)}
+              className="w-full bg-white border border-stone-300 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#6C5389]/30"
+            >
+              <option value="all">{t("shop.filters.every_occasion")}</option>
+              <option value="birthday">{t("shop.filters.birthday")}</option>
+              <option value="anniversary">{t("shop.filters.anniversary")}</option>
+              <option value="thank_you">{t("shop.filters.thank_you")}</option>
             </select>
           </div>
 
@@ -67,16 +62,24 @@ export default function ShopFilterBar({ searchTerm = "", onSearchChange }) {
             <label className="block font-semibold mb-1.5 text-stone-800">
               {t("shop.filters.price_label")}
             </label>
-            <select className="w-full bg-white border border-stone-300 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#6C5389]/30">
-              <option>{t("shop.filters.every_occasion")}</option>
-              <option>{t("shop.filters.every_occasion_under")} €30</option>
-              <option>€30 - €40</option>
-              <option>{t("shop.filters.every_occasion_over")} €40</option>
+            <select
+              value={filters.price}
+              onChange={(e) => onFilterChange("price", e.target.value)}
+              className="w-full bg-white border border-stone-300 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#6C5389]/30"
+            >
+              <option value="all">{t("shop.filters.every_occasion")}</option>
+              <option value="under_5">{t("shop.filters.every_occasion_under")} €5</option>
+              <option value="5_to_10">€5 - €10</option>
+              <option value="over_10">{t("shop.filters.every_occasion_over")} €10</option>
             </select>
           </div>
 
           {/* Reset Button */}
-          <button className="text-[#6C5389] underline font-medium px-2 py-2.5 hover:text-purple-900 transition-colors">
+          <button
+            type="button"
+            onClick={onReset}
+            className="text-[#6C5389] underline font-medium px-2 py-2.5 hover:text-purple-900 transition-colors"
+          >
             {t("shop.filters.reset")}
           </button>
         </div>
