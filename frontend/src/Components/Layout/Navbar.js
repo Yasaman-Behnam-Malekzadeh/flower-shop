@@ -138,21 +138,6 @@ const Navbar = ({ selectedFlowers = {}, onUpdateCount }) => {
               </span>
             </button>
 
-            {/* Action Icons */}
-            <button
-              className="text-[#2B2B2B] hover:text-black transition-colors p-1"
-              aria-label="Search"
-            >
-              <Search className="w-5 h-5 stroke-[1.8]" />
-            </button>
-
-            <button
-              className="text-[#2B2B2B] hover:text-black transition-colors p-1"
-              aria-label="Favorites"
-            >
-              <Heart className="w-5 h-5 stroke-[1.8]" />
-            </button>
-
             {/* User Account Menu / Button */}
             <div className="relative" ref={dropdownRef}>
               <button
