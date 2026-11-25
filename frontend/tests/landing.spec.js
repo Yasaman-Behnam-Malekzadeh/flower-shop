@@ -9,7 +9,7 @@ test.describe("KnitFlora Landing Page Tests", () => {
   test("should display top bar and main navigation header correctly", async ({
     page,
   }) => {
-    // 1. Check top banner announcement bar
+    //  1. Check top banner announcement bar
     await expect(
       page.getByText(/Crocheted with love\. Made to keep forever/i),
     ).toBeVisible();

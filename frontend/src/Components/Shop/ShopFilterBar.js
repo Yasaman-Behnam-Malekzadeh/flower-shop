@@ -9,10 +9,11 @@ export default function ShopFilterBar({ filters, onFilterChange, onReset }) {
       <div className="max-w-7xl mx-auto px-6 sm:px-12 flex flex-col md:flex-row items-center justify-between gap-4 text-xs sm:text-sm text-stone-700">
         {/* Search Input */}
         <div className="flex-1 w-full md:w-auto">
-          <label className="block font-semibold mb-1.5 text-stone-800">
+          <label htmlFor="shop-search-input" className="block font-semibold mb-1.5 text-stone-800">
             {t("shop.filters.search_label")}
           </label>
           <input
+            id="shop-search-input"
             value={filters.search}
             onChange={(e) => onFilterChange("search", e.target.value)}
             type="text"
@@ -25,10 +26,14 @@ export default function ShopFilterBar({ filters, onFilterChange, onReset }) {
         <div className="flex flex-wrap items-end gap-3 w-full md:w-auto">
           {/* Flower type */}
           <div className="flex-1 min-w-[120px]">
-            <label className="block font-semibold mb-1.5 text-stone-800">
+            <label
+              htmlFor="filter-flower-type"
+              className="block font-semibold mb-1.5 text-stone-800"
+            >
               {t("shop.filters.flower_type_label")}
             </label>
             <select
+              id="filter-flower-type"
               value={filters.flowerType}
               onChange={(e) => onFilterChange("flowerType", e.target.value)}
               className="w-full bg-white border border-stone-300 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#6C5389]/30"
@@ -52,7 +57,9 @@ export default function ShopFilterBar({ filters, onFilterChange, onReset }) {
             >
               <option value="all">{t("shop.filters.every_occasion")}</option>
               <option value="birthday">{t("shop.filters.birthday")}</option>
-              <option value="anniversary">{t("shop.filters.anniversary")}</option>
+              <option value="anniversary">
+                {t("shop.filters.anniversary")}
+              </option>
               <option value="thank_you">{t("shop.filters.thank_you")}</option>
             </select>
           </div>
@@ -68,9 +75,13 @@ export default function ShopFilterBar({ filters, onFilterChange, onReset }) {
               className="w-full bg-white border border-stone-300 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#6C5389]/30"
             >
               <option value="all">{t("shop.filters.every_occasion")}</option>
-              <option value="under_5">{t("shop.filters.every_occasion_under")} €5</option>
+              <option value="under_5">
+                {t("shop.filters.every_occasion_under")} €5
+              </option>
               <option value="5_to_10">€5 - €10</option>
-              <option value="over_10">{t("shop.filters.every_occasion_over")} €10</option>
+              <option value="over_10">
+                {t("shop.filters.every_occasion_over")} €10
+              </option>
             </select>
           </div>
 
