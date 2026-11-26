@@ -1,3 +1,4 @@
+/* eslint-disable testing-library/prefer-screen-queries */
 import { test, expect } from "@playwright/test";
 
 const MOCK_FLOWERS = [
@@ -38,4 +39,13 @@ test.describe("KnitFlora build page test", () => {
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
     await expect(page.getByText("Pick your blooms or let our AI Florist curate a custom mix for you.")).toBeVisible()
   });
+
+  test("Should switch between two tabs", async ({page}) => {
+    const manualBtn= page.getByRole("button" , {name : "manual"})
+    await manualBtn.click()
+
+    const aiBtn= page.getByRole("button" , {name : "ai"})
+    await aiBtn.click()
+
+  })
 });

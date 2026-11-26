@@ -113,6 +113,7 @@ export default function BuildPage() {
           {/* Mode Switcher Tabs */}
           <div className="inline-flex p-1 bg-stone-200/60 rounded-2xl border border-stone-200 shadow-inner">
             <button
+              name="manual"
               onClick={() => setActiveTab("manual")}
               className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all ${
                 activeTab === "manual"
@@ -123,6 +124,7 @@ export default function BuildPage() {
               {t("build.switch-tab.manual")}
             </button>
             <button
+              name="ai"
               onClick={() => setActiveTab("ai")}
               className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-medium flex items-center gap-2 transition-all ${
                 activeTab === "ai"
